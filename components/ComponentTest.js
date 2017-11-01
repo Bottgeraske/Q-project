@@ -26,16 +26,14 @@ class ComponentTest extends Component {
   constructor() {
       super();
 
-      console.log('constructor', this);
       this.state = {
          currentTime: '00:00:00',
          demoObj: {
-           title: 'This is a demo!',
+           title: 'This is a demo4!',
            number: 0,
          }
       }
       this.itemsRefs = this.getRef().child('items');
-      console.log('itemsRefs in constructor', this.itemsRefs);
   }
 
   getRef() {
@@ -44,14 +42,10 @@ class ComponentTest extends Component {
 
   listenForItems() {
     //this works!
-    console.log('listenForItems this',this);
     let itemsRef = this.getRef().child('items');
     //but should work like this:
     //let itemsRef = this.itemsRef;
     //and when this works, the itemsRef shoudl be taken directly from constructor.
-    console.log("itemsRef", itemsRef);
-    console.log('this.itemsRef', this.itemsRef);
-    console.log('listenForItems is run');
     itemsRef.on('value', (snap) => {
 
       // get children as an array
@@ -64,35 +58,29 @@ class ComponentTest extends Component {
         });
       });
 
-      console.log(items);
-
     });
   }
 
   //standard metode til at kalde metoder efte mount.
   componentDidMount() {
     this.updateTime();
-    console.log('componentDidMount this', this);
     let test = this;
-    console.log('FUCK!', test.itemsRef);
-    console.log('componentDidMount this.itemsRef', this.itemsRef);
     this.listenForItems();
   }
 
   updateTime() {
-    console.log('updateTime is run');
     let date = new Date();
     let timeStamp = (
       date.getHours() + ':'+
       date.getMinutes() + ':' +
       date.getSeconds()
     )
-    console.log('updateTime this', this);
     this.setState({currentTime: timeStamp})
   }
 
   addItem() {
-    console.log('addItem is run');
+    //get last number
+    let currentNumber = this.itemsRefs.orderByKey().limitToLast(1).number;
     let nextNo = this.state.demoObj.number + 1;
     this.itemsRefs.push(this.state.demoObj);
 
@@ -103,7 +91,6 @@ class ComponentTest extends Component {
         number: nextNo
       }
     })
-    console.log(this.state.demoObj);
   }
 
   render() {
