@@ -27,7 +27,7 @@ class ComponentTest extends Component {
       this.state = {
          currentTime: '00:00:00',
       }
-      this.itemsRefs = this.getRef().child('items');
+      this.itemsRef = this.getRef().child('items');
   }
 
   getRef() {
@@ -35,12 +35,7 @@ class ComponentTest extends Component {
   }
 
   listenForItems() {
-    //this works!
-    let itemsRef = this.getRef().child('items');
-    //but should work like this:
-    //let itemsRef = this.itemsRef;
-    //and when this works, the itemsRef shoudl be taken directly from constructor.
-    itemsRef.on('value', (snap) => {
+    this.itemsRef.on('value', (snap) => {
       // get children as an array
       var items = [];
       snap.forEach((child) => {
@@ -50,7 +45,7 @@ class ComponentTest extends Component {
           _key: child.key
         });
       });
-
+    console.log('items', items);
     });
   }
 
@@ -72,16 +67,15 @@ class ComponentTest extends Component {
   }
 
   addItem() {
+    let latestNumber = 0;
     //get last number
-    console.log('this.itemsrefs', this.itemsRefs);
-    //let query = this.itemsRefs.orderByKey().limitToLast(1);
-    this.itemsRefs.orderByKey().limitToLast(1).on("value", (entries) => {
-      console.log(entries.val());
+    this.itemsRef.orderByKey().limitToLast(1).once('child_added', (child) => {
+        latestNumber = (child.val().number);
     })
 
-    this.itemsRefs.push({
+    this.itemsRef.push({
         title:'demo',
-        number: 1,
+        number: latestNumber+1,
     });
   }
 
