@@ -19,19 +19,13 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 console.ignoredYellowBox = [
   "Setting a timer"
-  //random comment
 ];
 
 class ComponentTest extends Component {
   constructor() {
       super();
-
       this.state = {
          currentTime: '00:00:00',
-         demoObj: {
-           title: 'This is a demo4!',
-           number: 0,
-         }
       }
       this.itemsRefs = this.getRef().child('items');
   }
@@ -47,7 +41,6 @@ class ComponentTest extends Component {
     //let itemsRef = this.itemsRef;
     //and when this works, the itemsRef shoudl be taken directly from constructor.
     itemsRef.on('value', (snap) => {
-
       // get children as an array
       var items = [];
       snap.forEach((child) => {
@@ -80,17 +73,16 @@ class ComponentTest extends Component {
 
   addItem() {
     //get last number
-    let currentNumber = this.itemsRefs.orderByKey().limitToLast(1).number;
-    let nextNo = this.state.demoObj.number + 1;
-    this.itemsRefs.push(this.state.demoObj);
-
-
-    this.setState({
-      demoObj: {
-        title: 'this is a demo2!',
-        number: nextNo
-      }
+    console.log('this.itemsrefs', this.itemsRefs);
+    //let query = this.itemsRefs.orderByKey().limitToLast(1);
+    this.itemsRefs.orderByKey().limitToLast(1).on("value", (entries) => {
+      console.log(entries.val());
     })
+
+    this.itemsRefs.push({
+        title:'demo',
+        number: 1,
+    });
   }
 
   render() {
@@ -107,8 +99,6 @@ class ComponentTest extends Component {
           >
         </ActionButton>
         <ActionButton
-          //.bind(this) binder funktionen til det her element.
-          //fx vil man ikke kunne opdatere dennes state, hvis man ikke binder.
           onPress={this.addItem.bind(this)}
           title='Tilføj item!'
           >
