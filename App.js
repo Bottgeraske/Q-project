@@ -43,7 +43,7 @@ const TabIcon = ({ focused, title, type }) => {
 const scene1 = (props) => {
   return (
     <Text>
-      Welcome to React Native!
+      Hej Morten og Kapper!
     </Text>
   );
 }
@@ -56,7 +56,7 @@ const scene2 = (props) => {
   );
 }
 
-export default class App extends Component<{}> {
+export default class App extends Component {
   render() {
     return (
       <Router>
