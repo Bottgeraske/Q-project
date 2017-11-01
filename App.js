@@ -43,7 +43,7 @@ const TabIcon = ({ focused, title, type }) => {
 const scene1 = (props) => {
   return (
     <Text>
-      Hej Morten og Kapper!! FUCK
+      Hej Morten og Kapper!! FUCK TEST3
     </Text>
   );
 }
