@@ -80,7 +80,7 @@ export default class App extends Component {
               >
               <Scene
                 key="MapPage"
-                title="MapPage"
+                title="Map Page"
                 component={MapPage}
                 />
             </Scene>
