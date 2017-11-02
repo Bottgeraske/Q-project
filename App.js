@@ -5,15 +5,30 @@
  */
 
 import React, { Component } from 'react';
+import * as firebase from 'firebase';
+import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
+import { Icon } from 'react-native-elements';
+import ComponentTest from './components/ComponentTest';
+import ShopOwner from './components/ShopOwner';
 import {
   Platform,
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
-import { Icon } from 'react-native-elements';
-import ComponentTest from './components/ComponentTest';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAlcAVowiuTK8SFOaPN42nVNuzsHrPboRE",
+  authDomain: "queueme-b24c2.firebaseapp.com",
+  databaseURL: "http://queueme-b24c2.firebaseio.com",
+  projectId: "queueme-b24c2",
+  storageBucket: "queueme-b24c2.appspot.com",
+  messagingSenderId: "319175123060"
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+console.ignoredYellowBox = [
+  "Setting a timer"
+];
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -64,6 +79,11 @@ export default class App extends Component {
           key="root"
           hideNavBar={true}
           >
+          <Scene
+          component={ShopOwner}
+            key='ShopOwner'
+            title='ShopOwner'
+          />
           <Tabs
             key='Tabbar'
             swipeEnabled
