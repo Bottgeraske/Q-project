@@ -14,51 +14,55 @@ class MapPage extends Component {
     constructor() {
         super();
         this.state = {
-            currentPosition: {
-                lat: 0,
-                long: 0,
-            },
-            region: {
+            pharmacies: [
+                {
+                    type: 'farmacia',
+                    title: 'Farmacia de Trianglen',
+                    description: 'Me gusta las Farmacia de Dinamarka',
+                    coordinates: {
+                        latitude: 55.7000354,
+                        longitude: 12.57803100000001
+                    }
+                },
+                {
+                    type: 'farmacia',
+                    title: 'Farmacia de Østerbrogade',
+                    description: 'También me gusta esta farmacia',
+                    coordinates: {
+                        latitude: 55.7094258,
+                        longitude: 12.577164799999991
+                    }
+                }
+            ]
+            /*region: {
                 latitude: 37.78825,
                 longitude: -122.4324,
                 latitudeDelta: 0.00922*0.5,
                 longitudeDelta: 0.00421*0.5
-            },
+            },*/
         }
     }
 
-    getCurrentLocation() {
-        console.log('getCurrentLocation is run');
-        console.log(navigator);
-        console.log(navigator.geolocation);
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-            console.log('success');
-            console.log(position);
-            this.setState({
-                currentPosition: {
-                    lat: position.coords.latitude,
-                    long: position.coords.longitude
-                }
-            }),
-            (error) => {
-                console.log('err0r');
-                console.log(error);
-            },
-            { enableHighAccuracy: true, timeout: 30000, maximumAge: 1000 }
-        })
-
+    componentDidMount() {
+        console.log(this.state.region);
+        //this.getCurrentLocation();
+        console.log(this.state.region);
     }
 
-    getInitialState() {
-        return {
-            region: {
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+    getCurrentLocation() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                let region = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: 0.00922*0.2,
+                    longitudeDelta: 0.00421*0.2
+                };
+                this.onRegionChange(region);
             },
-        };
+            (error) => console.error(error),
+            { enableHighAccuracy: true, timeout: 30000, maximumAge: 1000 },
+        );
     }
 
     onRegionChange(region) {
@@ -72,14 +76,19 @@ class MapPage extends Component {
                     //minZoomLevel={10}
                     style = {styles.map}
                     showsUserLocation={true}
-                    Region={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                    //onRegionChange={this.onRegionChange.bind(this)}
-                />
+                    //Region={this.state.region}
+                    onRegionChange={this.onRegionChange.bind(this)}
+                >
+                    {this.state.pharmacies.map((marker) => {
+                        return(
+                            <MapView.Marker
+                                coordinate={marker.coordinates}
+                                title={marker.title}
+                                description={marker.description}
+                            />
+                        )
+                    })}
+                </MapView>
             </View>
         )
             /*
