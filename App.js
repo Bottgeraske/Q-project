@@ -18,12 +18,12 @@ import {
 } from 'react-native';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAlcAVowiuTK8SFOaPN42nVNuzsHrPboRE",
-  authDomain: "queueme-b24c2.firebaseapp.com",
-  databaseURL: "http://queueme-b24c2.firebaseio.com",
-  projectId: "queueme-b24c2",
-  storageBucket: "queueme-b24c2.appspot.com",
-  messagingSenderId: "319175123060"
+  apiKey: "AIzaSyAfMjADzM6r46ev4ZJeQajH1vIwMbE2OjE",
+  authDomain: "qmedb-c80b4.firebaseapp.com",
+  databaseURL: "https://qmedb-c80b4.firebaseio.com",
+  projectId: "qmedb-c80b4",
+  storageBucket: "qmedb-c80b4.appspot.com",
+  messagingSenderId: "971194801614"
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 console.ignoredYellowBox = [
