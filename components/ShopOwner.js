@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 import ActionButton from './ActionButton';
+import {Actions} from 'react-native-router-flux';
 import * as firebase from 'firebase';
 import styles from '../styles';
 const {
@@ -74,6 +75,10 @@ class ShopOwner extends Component {
 			()=>{}:this.q_ref.update({q_total: 0})}
 	}
 
+	_logout(){
+		Actions.Authentication();
+	}
+
 	// standard metode til at kalde metoder efte mount.
 	componentDidMount() {
 		this.getCurrentQ();
@@ -94,7 +99,7 @@ class ShopOwner extends Component {
 				:<Button disabled onPress={()=>{}} title="Kunde betjent"/>}
 				</View>
 				<Button onPress={this._open_close_Q.bind(this)} title={this.state.q_status?"Luk Kø":"Åbn Kø"}/>
-				<Button onPress={()=>{}} title="Log ud"/>
+				<Button onPress={this._logout.bind(this)} title="Log ud"/>
 			</View>
 		)
 	}

@@ -10,6 +10,7 @@ import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
 import { Icon } from 'react-native-elements';
 import ComponentTest from './components/ComponentTest';
 import ShopOwner from './components/ShopOwner';
+import Authentication from './components/Authentication';
 import {
   Platform,
   StyleSheet,
@@ -75,14 +76,17 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        <Scene
-          key="root"
-          hideNavBar={true}
-          >
-          <Scene
-          component={ShopOwner}
-            key='ShopOwner'
-            title='ShopOwner'
+        <Scene key="root" hideNavBar={true}>
+					<Scene
+							initial={true}
+							component={ShopOwner}
+							key='ShopOwner'
+							title='ShopOwner'
+          />
+					<Scene
+						component={Authentication}
+						key='Authentication'
+						title='Authentication'
           />
           <Tabs
             key='Tabbar'
