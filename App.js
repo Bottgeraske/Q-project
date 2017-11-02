@@ -14,6 +14,7 @@ import {
 import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
 import { Icon } from 'react-native-elements';
 import ComponentTest from './components/ComponentTest';
+import MapPage from './components/MapPage';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -80,7 +81,7 @@ export default class App extends Component {
               <Scene
                 key="MapPage"
                 title="MapPage"
-                component={scene1}
+                component={MapPage}
                 />
             </Scene>
             <Scene
