@@ -56,6 +56,7 @@ const scene2 = (props) => {
 export default class App extends Component {
   render() {
       //resetDB();
+      console.disableYellowBox = true;
     return (
       <Router>
         <Scene key="root" hideNavBar={true}>
