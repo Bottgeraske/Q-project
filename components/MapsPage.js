@@ -12,8 +12,11 @@ import * as firebase from 'firebase';
 class MapsPage extends Component {
     constructor(props) {
         super(props);
-        this.ticketsRef = firebase.database().ref().child('tickets');
+        this.ticketsRef = firebase.database().ref().child('ticket');
+        this.storesRef = firebase.database().ref().child('store');
+        this.customersRef = firebase.database().ref().child('customer');
         this.state = {
+            allStores: [],
             pharmacies: [
                 {
                     key: 'F1',
@@ -121,9 +124,32 @@ class MapsPage extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.region);
-        //this.getCurrentLocation();
-        console.log(this.state.region);
+        this.getAllStores((stores) => {
+            this.setState({allStores:stores})
+        });
+        this.getDemoCustomer();
+
+    }
+
+    getAllStores(cb) {
+        let _stores = []
+        this.storesRef.orderByKey().on('child_added', (stores) => {
+            let store = stores.val();
+            store._key = stores.key;
+            console.log(stores.key);
+            console.log(store);
+            _stores.push(store);
+            cb(_stores)
+        });
+    }
+
+    getDemoCustomer() {
+        this.customersRef.limitToFirst(1).once('child_added', (customer) => {
+            let _customer = customer.val();
+            _customer.key = customer.key;
+            this.setState({customer:_customer});
+        })
+
     }
 
     getCurrentLocation() {
@@ -146,20 +172,16 @@ class MapsPage extends Component {
         this.setState({ region });
     }
 
-    drawTicket(storeKey) {
-        //alert(storeKey + this.props.userKey);
-        //get last number
-        this.ticketsRef
-            .orderByChild('store_key')
-            .limitToLast(1)
-            .equalTo('')
-            .once('child_added', (child) => {
-                latestNumber = (child.val().number);
-            })
+    drawTicket(store) {
+        this.ticketsRef.orderByKey().limitToLast(1).once('child_added', (ticket) => {
+            let latestNumber = ticket.val().q_number;
+            this.ticketsRef.push({
+                storeKey: store._key,
+                customerKey: this.state.customer.key,
+                q_number: latestNumber+1
+            });
+            alert('You are now in line at '+store.title+' with ticket number '+(latestNumber+1))
 
-        this.itemsRef.push({
-            title:'demo',
-            number: latestNumber+1,
         });
     }
 
@@ -173,27 +195,27 @@ class MapsPage extends Component {
                     //Region={this.state.region}
                     onRegionChange={this.onRegionChange.bind(this)}
                 >
-                    {this.state.pharmacies.map((pharmacy) => {
+                    {this.state.allStores.map((store) => {
                         return(
                             <MapView.Marker
                                 style={{padding:20}}
-                                coordinate={pharmacy.coordinates}
+                                coordinate={store.coordinates}
                             >
                                 <MapView.Callout>
                                     <View>
                                         <Text
                                             style={{fontSize:20, textAlign: 'center' }}
                                         >
-                                            {pharmacy.title}
+                                            {store.title}
                                         </Text>
                                         <Text style={{color: 'grey'}}
                                         >
-                                            {pharmacy.description}
+                                            {store.description}
                                         </Text>
                                         <View
                                             style={styles.openingHoursContainer}
                                         >
-                                            {pharmacy.openingHours.map((day) => {
+                                            {store.openingHours.map((day) => {
                                                 return(
                                                     <View style={styles.openingHours}>
                                                         <View style={[styles.hoursColumn, {height: day['value']} ]}/>
@@ -205,7 +227,7 @@ class MapsPage extends Component {
                                         </View>
                                         <TouchableHighlight
                                             onPress={() => {
-                                                this.drawTicket(pharmacy.key)
+                                                this.drawTicket(store);
                                             }}
                                             style={styles.drawTicketButton}
                                         >

@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
+import {Router, Scene, Tabs, Switch} from 'react-native-router-flux';
 import { Icon } from 'react-native-elements';
 import ShopOwner from './components/ShopOwner';
 import Authentication from './components/Authentication';
@@ -14,10 +14,8 @@ import SearchPage from './components/SearchPage'
 import MapsPage from './components/MapsPage'
 
 import {
-  Platform,
   StyleSheet,
   Text,
-  View
 } from 'react-native';
 
 const firebaseConfig = {
@@ -54,7 +52,8 @@ const scene2 = (props) => {
 
 
 export default class App extends Component {
-  render() {
+    render() {
+        console.disableYellowBox = true;
       //resetDB();
     return (
       <Router>
@@ -141,9 +140,10 @@ function resetDB() {
     let storeKey1 = null;
     let storeKey2 = null;
 
+    let customerKey1 = null;
+
     const initStores = [
         {
-            key: 'F1',
             type: 'farmacia',
             title: 'Farmacia de Trianglen',
             description: 'Me gusta las Farmacia de Dinamarka',
@@ -155,9 +155,45 @@ function resetDB() {
             currentNumber: 0,
             totalNumber: 0,
             phoneNumber: 88888888,
+            openingHours: [
+                {
+                    day: 'M',
+                    hours: '10 - 19',
+                    value: 30,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 40,
+                },
+                {
+                    day: 'O',
+                    hours: '10 - 19',
+                    value: 50,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'F',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'L',
+                    hours: '10 - 19',
+                    value: 20,
+                },
+                {
+                    day: 'S',
+                    hours: '10 - 19',
+                    value: 30,
+                }
+            ]
         },
         {
-            key: 'F2',
             type: 'farmacia',
             title: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
@@ -169,6 +205,43 @@ function resetDB() {
             currentNumber: 0,
             totalNumber: 0,
             phoneNumber: 88888888,
+            openingHours: [
+                {
+                    day: 'M',
+                    hours: '10 - 19',
+                    value: 30,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 40,
+                },
+                {
+                    day: 'O',
+                    hours: '10 - 19',
+                    value: 50,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'F',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'L',
+                    hours: '10 - 19',
+                    value: 20,
+                },
+                {
+                    day: 'S',
+                    hours: '10 - 19',
+                    value: 30,
+                }
+            ]
         }
     ]
     const initCustomers = [
@@ -224,12 +297,12 @@ function resetDB() {
 
     initStores.forEach((store) => {
         let key = storeRef.push(store).key;
-        initOpeningHours.forEach((opening) => {
-            storeRef.child(key).child('openingHours').push(opening);
-        })
+        //initOpeningHours.forEach((opening) => {
+        //    storeRef.child(key).child('openingHours').push(opening);
+        //})
     });
     initCustomers.forEach((customer) => {
-        customerRef.push(customer);
+        customerKey1 = customerRef.push(customer).key;
     })
     //get specific stores
     storeRef.orderByChild('title').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
@@ -238,6 +311,12 @@ function resetDB() {
     storeRef.orderByChild('title').equalTo('Farmacia de Østerbrogade').once('child_added', (child) => {
         storeKey2 = child.key
     });
+
+    const initTicket = {
+        q_number: 1,
+        storeKey: storeKey1,
+        customerKey: customerKey1
+    }
 
     const initAdmins = [
         {
@@ -254,7 +333,9 @@ function resetDB() {
 
     initAdmins.forEach((admin) => {
         adminRef.push(admin);
-    })
+    });
+
+    ticketRef.push(initTicket);
 
 }
 
