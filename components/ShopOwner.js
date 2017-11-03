@@ -18,7 +18,7 @@ class ShopOwner extends Component {
 				q_total: 0,
 				q_status: 0,
 				store_key: this.props.text,
-				store_name: 0
+				store_name: 0,
 			};
 			this.storeRef = this.getRef().child('store');
 			this.q_ref = this.getRef().child('store/'+this.state.store_key)
@@ -32,9 +32,9 @@ class ShopOwner extends Component {
 	getStoreName(){
 		this.storeRef.orderByKey()
 		.equalTo(this.state.store_key).on('value', (snap) => {
-      let name = ''
-      snap.forEach((child) => {
-        name = child.val().name
+	  let name = ''
+	  snap.forEach((child) => {
+		name = child.val().name
 			});
 			this.setState({store_name: name})
 		});
@@ -42,14 +42,18 @@ class ShopOwner extends Component {
 
 
 	getCurrentQ(){
-		this.storeRef.orderByKey()
+		this.ticketRef.orderByChild('store_key')
 		.equalTo(this.state.store_key).on('value', (snap) => {
-      let q_number = 0
-      snap.forEach((child) => {
-				q_number = child.val().q_current
+			let next_customer = 10000000000
+	  snap.forEach((child) => {
+				if (child.val().is_active) {
+					if (next_customer > child.val().q_num) {
+					next_customer = child.val().q_num
+					}
+				}
 			});
-			this.setState({q_current: q_number})
-		console.log('q_current', q_number);
+			this.setState({q_current: next_customer})
+		console.log('test', this.state.current_ticket);
 		});
 	}
 
@@ -57,22 +61,22 @@ class ShopOwner extends Component {
 		this.ticketRef.orderByChild('store_key')
 		.equalTo(this.state.store_key).on('value', (snap) => {
 			let q_numbers = 0
-      snap.forEach((child) => {
+	  snap.forEach((child) => {
 				if (child.val().is_active) {
 					q_numbers ++
 				}
 				
 			});
 			this.setState({q_total: q_numbers})
-		console.log('test', q_numbers);
+		console.log('total_q:', q_numbers);
 		});
 	}
 
 	getQStatus(){
 		this.storeRef.orderByKey().equalTo(this.state.store_key).on('value', (snap) => {
-      let status = 0
-      snap.forEach((child) => {
-        status = child.val().q_open
+	  let status = 0
+	  snap.forEach((child) => {
+		status = child.val().q_open
 			});
 			this.setState({q_status: status})
 		console.log('q_status', status);
@@ -80,7 +84,12 @@ class ShopOwner extends Component {
 	}
 
 	_customerServed() {
-		this.q_ref.update({q_current: this.state.q_current+1});
+		this.ticketRef.orderByChild('q_num').equalTo(this.state.q_current).on('child_added',(child) => {
+			this.getRef().child('ticket/'+child.key).update({is_active: 0})	
+		});
+		// this.q_refupdate({q_current: this.state.q_current+1});
+		// console.log(this.ticketRef)
+		// console.log(this.ticketActiveRef)
 	}
 
 	_open_close_Q() {
