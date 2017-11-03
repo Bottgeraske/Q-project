@@ -11,16 +11,18 @@ const {
 } = ReactNative;
 
 class ShopOwner extends Component {
-	constructor() {
-			super();
+	constructor(props) {
+			super(props);
 			this.state = { 
 				q_current: 0,
 				q_total: 0,
 				q_status: 0,
-				store_key: 'sfgdfgdfg'
+				store_key: this.props.text
 			};
+			// this.setState({store_key: this.props.text})
 			this.storeRef = this.getRef().child('store');
 			this.q_ref = this.getRef().child('store/'+this.state.store_key)
+			this.ticketRef = this.getRef().child('ticket')
 	}
 
 	getRef() {
@@ -34,7 +36,7 @@ class ShopOwner extends Component {
         q_number = child.val().q_current
 			});
 			this.setState({q_current: q_number})
-    console.log('q_current', q_number);
+		console.log('q_current', q_number);
 		});
 	}
 
@@ -71,8 +73,9 @@ class ShopOwner extends Component {
 		// resets the current queue number to 0, when queue is opened
 		{this.state.q_status?
 		()=>{}:this.q_ref.update({q_current: 0})}
+		// resets the total queue number to 0, when queue is opened
 		{this.state.q_status?
-			()=>{}:this.q_ref.update({q_total: 0})}
+		()=>{}:this.q_ref.update({q_total: 0})}
 	}
 
 	_logout(){

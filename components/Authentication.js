@@ -13,7 +13,7 @@ const {
 class Authentication extends Component {
   constructor() {
     super();
-    this.state = { 
+    this.state = {
     };
   }
 
@@ -21,8 +21,12 @@ class Authentication extends Component {
     Actions.Tabbar();
   }
 
-  shopOwner_login() {
-    Actions.ShopOwner();
+  østerbro_login() {
+    Actions.ShopOwner({text: 'sfgdfgdfg'});
+  }
+
+  trianglen_login() {
+    Actions.ShopOwner({text: 'inervinerv'});
   }
 
   render() {
@@ -30,8 +34,10 @@ class Authentication extends Component {
 			<View style={styles.form}>
 				<Text style={styles.title}>Log ind som kunde</Text>
         <Button onPress={this.customer_login.bind(this)} title="Login"/>
-				<Text style={styles.title}>Log ind som forretningsejer</Text>
-        <Button title="Login" onPress={this.shopOwner_login.bind(this)}/>
+				<Text style={styles.title}>Log in as admin (Østerbrogade</Text>
+        <Button title="Login" onPress={this.østerbro_login.bind(this)}/>
+        <Text style={styles.title}>Login as admin (Trianglen)</Text>
+        <Button title="Login" onPress={this.trianglen_login.bind(this)}/>
 			</View>
 		)
 	}
