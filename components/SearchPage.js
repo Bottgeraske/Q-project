@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     },
 
     MenuLabel: {
-        padding: '2,5%',
+        padding: '2.5%',
 
     },
 
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     SwitchContainer: {
         display: 'flex',
         flexDirection: 'row',
-        padding: '2,5%',
+        padding: '2.5%',
         backgroundColor: 'white',
         borderWidth: 0.5,
         borderColor: '#d6d7da',
