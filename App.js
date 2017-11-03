@@ -55,18 +55,19 @@ const scene2 = (props) => {
 
 export default class App extends Component {
   render() {
+      //resetDB();
     return (
       <Router>
         <Scene key="root" hideNavBar={true}>
-					<Scene
-						component={Authentication}
-						key='Authentication'
-						title='Authentication'
+            <Scene
+                component={Authentication}
+                key='Authentication'
+                title='Authentication'
           />
           <Scene
-							component={ShopOwner}
-							key='ShopOwner'
-							title='ShopOwner'
+            component={ShopOwner}
+            key='ShopOwner'
+            title='ShopOwner'
           />
           <Tabs
             key='Tabbar'
