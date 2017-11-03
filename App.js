@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 import ComponentTest from './components/ComponentTest';
 import ShopOwner from './components/ShopOwner';
 import Authentication from './components/Authentication';
+import SearchPage from './components/SearchPage'
 import {
   Platform,
   StyleSheet,
@@ -72,6 +73,8 @@ const scene2 = (props) => {
   );
 }
 
+
+
 export default class App extends Component {
   render() {
     return (
@@ -96,6 +99,18 @@ export default class App extends Component {
             tabBarStyle={{ backgroundColor: '#FFFFFF' }}
             >
             <Scene
+                key="SearchTab"
+                title="search"
+                icon={TabIcon}
+                type='ionicons'
+            >
+              <Scene
+                  key="SearchPage"
+                  title="SearchPage"
+                  component={SearchPage}
+              />
+            </Scene>
+            <Scene
               key="MapTab"
               title="map-marker"
               icon={TabIcon}
@@ -104,18 +119,6 @@ export default class App extends Component {
                 key="MapPage"
                 title="MapPage"
                 component={scene1}
-                />
-            </Scene>
-            <Scene
-              key="SearchTab"
-              title="search"
-              icon={TabIcon}
-              type='ionicons'
-              >
-              <Scene
-                key="SearchPage"
-                title="SearchPage"
-                component={scene2}
                 />
             </Scene>
             <Scene
