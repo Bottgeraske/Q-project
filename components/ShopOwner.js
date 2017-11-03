@@ -17,9 +17,9 @@ class ShopOwner extends Component {
 				q_current: 0,
 				q_total: 0,
 				q_status: 0,
-				store_key: this.props.text
+				store_key: this.props.text,
+				store_name: 0
 			};
-			// this.setState({store_key: this.props.text})
 			this.storeRef = this.getRef().child('store');
 			this.q_ref = this.getRef().child('store/'+this.state.store_key)
 			this.ticketRef = this.getRef().child('ticket')
@@ -29,11 +29,24 @@ class ShopOwner extends Component {
 			return firebase.database().ref();
 	}
 
+	getStoreName(){
+		this.storeRef.orderByKey()
+		.equalTo(this.state.store_key).on('value', (snap) => {
+      let name = ''
+      snap.forEach((child) => {
+        name = child.val().name
+			});
+			this.setState({store_name: name})
+		});
+	}
+
+
 	getCurrentQ(){
-		this.storeRef.orderByKey().equalTo(this.state.store_key).on('value', (snap) => {
+		this.storeRef.orderByKey()
+		.equalTo(this.state.store_key).on('value', (snap) => {
       let q_number = 0
       snap.forEach((child) => {
-        q_number = child.val().q_current
+				q_number = child.val().q_current
 			});
 			this.setState({q_current: q_number})
 		console.log('q_current', q_number);
@@ -41,13 +54,17 @@ class ShopOwner extends Component {
 	}
 
 	getTotalQ(){
-		this.storeRef.orderByKey().equalTo(this.state.store_key).on('value', (snap) => {
-      let q_number = 0
+		this.ticketRef.orderByChild('store_key')
+		.equalTo(this.state.store_key).on('value', (snap) => {
+			let q_numbers = 0
       snap.forEach((child) => {
-        q_number = child.val().q_total
+				if (child.val().is_active) {
+					q_numbers ++
+				}
+				
 			});
-			this.setState({q_total: q_number})
-		console.log('q_total', q_number);
+			this.setState({q_total: q_numbers})
+		console.log('test', q_numbers);
 		});
 	}
 
@@ -87,15 +104,17 @@ class ShopOwner extends Component {
 		this.getCurrentQ();
 		this.getTotalQ();
 		this.getQStatus();
+		this.getStoreName();
 	}
 
 	render() {
 		return (
 			<View style={styles.form}>
-				<Text style={styles.title}>ADMIN</Text>
-				<Text style={styles.title}>Nuværende kønummer:</Text>
+				<Text style={styles.title}>Welcome Admin for:</Text>
+				<Text style={styles.title}>{this.state.store_name}</Text>
+				<Text style={styles.title}>Current queue number</Text>
 				<Text style={styles.title}>{this.state.q_current}</Text>
-				<Text style={styles.title}>Antal personer i kø</Text>
+				<Text style={styles.title}>Number of people in line</Text>
 				<Text style={styles.title}>{this.state.q_total}</Text>
 				<View>
 				{this.state.q_status?<Button onPress={this._customerServed.bind(this)} title="Kunde betjent"/>
