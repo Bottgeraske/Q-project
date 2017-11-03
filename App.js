@@ -78,15 +78,14 @@ export default class App extends Component {
       <Router>
         <Scene key="root" hideNavBar={true}>
 					<Scene
-							initial={true}
-							component={ShopOwner}
-							key='ShopOwner'
-							title='ShopOwner'
-          />
-					<Scene
 						component={Authentication}
 						key='Authentication'
 						title='Authentication'
+          />
+          <Scene
+							component={ShopOwner}
+							key='ShopOwner'
+							title='ShopOwner'
           />
           <Tabs
             key='Tabbar'
