@@ -124,33 +124,33 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "CameraApp-tvOS";
 		};
-		347549431FAC6E2100FAA1C0 /* PBXContainerItemProxy */ = {
+		347549721FACA3BE00FAA1C0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = ADD01A681E09402E00F6D226;
 			remoteInfo = "RCTBlob-tvOS";
 		};
-		347549541FAC6E2100FAA1C0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C214E6B48B094EA4BA2E9054 /* RNVectorIcons.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
-			remoteInfo = RNVectorIcons;
-		};
-		3475495B1FAC6E2200FAA1C0 /* PBXContainerItemProxy */ = {
+		347549891FACA3BF00FAA1C0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02B046A7B4D540FF8DC1E9EA /* RCTCamera.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4107012F1ACB723B00C6AA39;
 			remoteInfo = RCTCamera;
 		};
-		3475495E1FAC6E2200FAA1C0 /* PBXContainerItemProxy */ = {
+		3475498C1FACA3BF00FAA1C0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5AE9EBAF2F014BA8BCF9E768 /* RNFetchBlob.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A15C300E1CD25C330074CB35;
 			remoteInfo = RNFetchBlob;
+		};
+		3475498F1FACA3BF00FAA1C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C214E6B48B094EA4BA2E9054 /* RNVectorIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
+			remoteInfo = RNVectorIcons;
 		};
 		3DAD3E831DF850E9000B6D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -488,7 +488,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3475493B1FAC6E1C00FAA1C0 /* Recovered References */ = {
+		3475496C1FACA3BA00FAA1C0 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				3384870059F5445291B79E5D /* libRCTCamera.a */,
@@ -498,26 +498,26 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		3475493C1FAC6E2000FAA1C0 /* Products */ = {
+		347549821FACA3BF00FAA1C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				347549551FAC6E2100FAA1C0 /* libRNVectorIcons.a */,
+				3475498A1FACA3BF00FAA1C0 /* libRCTCamera.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		347549561FAC6E2100FAA1C0 /* Products */ = {
+		347549841FACA3BF00FAA1C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3475495F1FAC6E2200FAA1C0 /* libRNFetchBlob.a */,
+				3475498D1FACA3BF00FAA1C0 /* libRNFetchBlob.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		347549581FAC6E2100FAA1C0 /* Products */ = {
+		347549861FACA3BF00FAA1C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3475495C1FAC6E2200FAA1C0 /* libRCTCamera.a */,
+				347549901FACA3BF00FAA1C0 /* libRNVectorIcons.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -579,7 +579,7 @@
 				00E356EF1AD99517003FC87E /* CameraAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				E8EE0DDA49E24F639A610899 /* Resources */,
-				3475493B1FAC6E1C00FAA1C0 /* Recovered References */,
+				3475496C1FACA3BA00FAA1C0 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -601,7 +601,7 @@
 			isa = PBXGroup;
 			children = (
 				ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */,
-				347549441FAC6E2100FAA1C0 /* libRCTBlob-tvOS.a */,
+				347549731FACA3BE00FAA1C0 /* libRCTBlob-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -748,7 +748,7 @@
 					ProjectRef = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
 				},
 				{
-					ProductGroup = 347549581FAC6E2100FAA1C0 /* Products */;
+					ProductGroup = 347549821FACA3BF00FAA1C0 /* Products */;
 					ProjectRef = 02B046A7B4D540FF8DC1E9EA /* RCTCamera.xcodeproj */;
 				},
 				{
@@ -788,11 +788,11 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 347549561FAC6E2100FAA1C0 /* Products */;
+					ProductGroup = 347549841FACA3BF00FAA1C0 /* Products */;
 					ProjectRef = 5AE9EBAF2F014BA8BCF9E768 /* RNFetchBlob.xcodeproj */;
 				},
 				{
-					ProductGroup = 3475493C1FAC6E2000FAA1C0 /* Products */;
+					ProductGroup = 347549861FACA3BF00FAA1C0 /* Products */;
 					ProjectRef = C214E6B48B094EA4BA2E9054 /* RNVectorIcons.xcodeproj */;
 				},
 			);
@@ -863,32 +863,32 @@
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		347549441FAC6E2100FAA1C0 /* libRCTBlob-tvOS.a */ = {
+		347549731FACA3BE00FAA1C0 /* libRCTBlob-tvOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libRCTBlob-tvOS.a";
-			remoteRef = 347549431FAC6E2100FAA1C0 /* PBXContainerItemProxy */;
+			remoteRef = 347549721FACA3BE00FAA1C0 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		347549551FAC6E2100FAA1C0 /* libRNVectorIcons.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNVectorIcons.a;
-			remoteRef = 347549541FAC6E2100FAA1C0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3475495C1FAC6E2200FAA1C0 /* libRCTCamera.a */ = {
+		3475498A1FACA3BF00FAA1C0 /* libRCTCamera.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRCTCamera.a;
-			remoteRef = 3475495B1FAC6E2200FAA1C0 /* PBXContainerItemProxy */;
+			remoteRef = 347549891FACA3BF00FAA1C0 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3475495F1FAC6E2200FAA1C0 /* libRNFetchBlob.a */ = {
+		3475498D1FACA3BF00FAA1C0 /* libRNFetchBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNFetchBlob.a;
-			remoteRef = 3475495E1FAC6E2200FAA1C0 /* PBXContainerItemProxy */;
+			remoteRef = 3475498C1FACA3BF00FAA1C0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		347549901FACA3BF00FAA1C0 /* libRNVectorIcons.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNVectorIcons.a;
+			remoteRef = 3475498F1FACA3BF00FAA1C0 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3DAD3E841DF850E9000B6D8A /* libRCTImage-tvOS.a */ = {
