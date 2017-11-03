@@ -121,10 +121,10 @@ class ShopOwner extends Component {
 			<View style={styles.form}>
 				<Text style={styles.title}>Welcome Admin for:</Text>
 				<Text style={styles.title}>{this.state.store_name}</Text>
-				<Text style={styles.title}>Current queue number</Text>
-				<Text style={styles.title}>{this.state.q_current}</Text>
-				<Text style={styles.title}>Number of people in line</Text>
-				<Text style={styles.title}>{this.state.q_total}</Text>
+				<Text style={styles.information_title}>Current queue number:</Text>
+				<Text style={styles.q_number}>{this.state.q_current==10000000000?'No more customers in queue':this.state.q_current}</Text>
+				<Text style={styles.information_title}>Number of people in line:</Text>
+				<Text style={styles.q_number}>{this.state.q_total==0?'None':this.state.q_total}</Text>
 				<View>
 				{this.state.q_status?<Button onPress={this._customerServed.bind(this)} title="Kunde betjent"/>
 				:<Button disabled onPress={()=>{}} title="Kunde betjent"/>}
