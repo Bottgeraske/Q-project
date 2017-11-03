@@ -1,20 +1,23 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 import MapView from 'react-native-maps';
+import * as firebase from 'firebase';
 const {
     View,
     Dimensions,
     Modal,
     Text,
-    TouchableHighlight
+    TouchableHighlight,
 } = ReactNative;
 
 class MapPage extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.ticketsRef = firebase.database().ref().child('tickets');
         this.state = {
             pharmacies: [
                 {
+                    key: 'F1',
                     type: 'farmacia',
                     title: 'Farmacia de Trianglen',
                     description: 'Me gusta las Farmacia de Dinamarka',
@@ -61,6 +64,7 @@ class MapPage extends Component {
                     ]
                 },
                 {
+                    key: 'F2',
                     type: 'farmacia',
                     title: 'Farmacia de Østerbrogade',
                     description: 'También me gusta esta farmacia',
@@ -143,6 +147,23 @@ class MapPage extends Component {
         this.setState({ region });
     }
 
+    drawTicket(storeKey) {
+        //alert(storeKey + this.props.userKey);
+        //get last number
+        this.ticketsRef
+            .orderByChild('store_key')
+            .limitToLast(1)
+            .equalTo('')
+            .once('child_added', (child) => {
+            latestNumber = (child.val().number);
+        })
+
+        this.itemsRef.push({
+            title:'demo',
+            number: latestNumber+1,
+        });
+    }
+
     render() {
         return (
             <View style = {styles.preview}>
@@ -184,10 +205,7 @@ class MapPage extends Component {
                                 //onPress={popover.showPopper.bind(this)}
                             >
                                 <MapView.Callout>
-                                    <View
-                                        style={{
-                                        }}
-                                    >
+                                    <View>
                                         <Text
                                             style={{fontSize:20, textAlign: 'center' }}
                                             >
@@ -206,11 +224,20 @@ class MapPage extends Component {
                                                         <View style={[styles.hoursColumn, {height: day['value']} ]}/>
                                                         <Text style={{textAlign:'center'}}>{day.day}</Text>
                                                     </View>
-
                                                 )
                                             })}
 
                                         </View>
+                                        <TouchableHighlight
+                                            onPress={() => {
+                                                this.drawTicket(pharmacy.key)
+                                            }}
+                                            style={styles.drawTicketButton}
+                                            >
+                                            <Text style={styles.drawTicketText}>
+                                                Stil dig i fucking kø
+                                            </Text>
+                                        </TouchableHighlight>
                                     </View>
                                 </MapView.Callout>
                             </MapView.Marker>
@@ -258,6 +285,14 @@ const styles = {
         marginRight: 'auto',
         borderTopLeftRadius: 3,
         borderTopRightRadius: 3,
+    },
+    drawTicketButton: {
+        alignItems: 'center',
+        backgroundColor: '#7ba9f7',
+        borderRadius: 10,
+    },
+    drawTicketText: {
+        padding:10,
     }
 
 
