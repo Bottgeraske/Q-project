@@ -5,15 +5,31 @@
  */
 
 import React, { Component } from 'react';
+import * as firebase from 'firebase';
+import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
+import { Icon } from 'react-native-elements';
+import ComponentTest from './components/ComponentTest';
+import ShopOwner from './components/ShopOwner';
+import Authentication from './components/Authentication';
 import {
   Platform,
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
-import { Icon } from 'react-native-elements';
-import ComponentTest from './components/ComponentTest';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAfMjADzM6r46ev4ZJeQajH1vIwMbE2OjE",
+  authDomain: "qmedb-c80b4.firebaseapp.com",
+  databaseURL: "https://qmedb-c80b4.firebaseio.com",
+  projectId: "qmedb-c80b4",
+  storageBucket: "qmedb-c80b4.appspot.com",
+  messagingSenderId: "971194801614"
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+console.ignoredYellowBox = [
+  "Setting a timer"
+];
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -60,10 +76,17 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        <Scene
-          key="root"
-          hideNavBar={true}
-          >
+        <Scene key="root" hideNavBar={true}>
+					<Scene
+						component={Authentication}
+						key='Authentication'
+						title='Authentication'
+          />
+          <Scene
+							component={ShopOwner}
+							key='ShopOwner'
+							title='ShopOwner'
+          />
           <Tabs
             key='Tabbar'
             swipeEnabled
