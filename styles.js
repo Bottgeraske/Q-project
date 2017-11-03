@@ -92,6 +92,26 @@ var styles = StyleSheet.create({
   form: {
     backgroundColor: '#f2f2f2'
   },
+  q_number: {
+    color: 'blue',
+    fontSize: 30,
+    fontWeight: "500",
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20
+  },
+  information_title: {
+    color: '#444',
+    fontSize: 18,
+    fontWeight: "500",
+    textAlign: 'center',
+    alignItems: 'center',
+    textDecorationLine: 'underline',
+    justifyContent: 'center',
+    padding: 20
+  },
+
   title: {
     color: '#444',
     fontSize: 26,
