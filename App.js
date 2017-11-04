@@ -12,6 +12,7 @@ import ShopOwner from './components/ShopOwner';
 import Authentication from './components/Authentication';
 import SearchPage from './components/SearchPage'
 import MapsPage from './components/MapsPage'
+import AccountPage from './components/AccountPage'
 
 import {
   StyleSheet,
@@ -122,9 +123,9 @@ export default class App extends Component {
               icon={TabIcon}
               >
               <Scene
+                component={AccountPage}
                 key="AccountPage"
                 title="AccountPage"
-                component={scene2}
                 />
             </Scene>
           </Tabs>
