@@ -20,12 +20,12 @@ import {
 } from 'react-native';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAfMjADzM6r46ev4ZJeQajH1vIwMbE2OjE",
-  authDomain: "qmedb-c80b4.firebaseapp.com",
-  databaseURL: "https://qmedb-c80b4.firebaseio.com",
-  projectId: "qmedb-c80b4",
-  storageBucket: "qmedb-c80b4.appspot.com",
-  messagingSenderId: "971194801614"
+  apiKey: "AIzaSyA-xu1UtsOBmkGDG2wuzNe2-WA6YrcASYA",
+  authDomain: "testdemo-20978.firebaseapp.com",
+  databaseURL: "https://testdemo-20978.firebaseio.com",
+  projectId: "testdemo-20978",
+  storageBucket: "testdemo-20978.appspot.com",
+  messagingSenderId: "410211494997"
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 console.ignoredYellowBox = [
@@ -77,6 +77,8 @@ const scene2 = (props) => {
 
 export default class App extends Component {
   render() {
+      resetDB();
+      console.disableYellowBox = true;
     return (
       <Router>
         <Scene key="root" hideNavBar={true}>
@@ -180,3 +182,215 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+
+function resetDB() {
+    alert('resetDB is run');
+    let dbRef = firebase.database().ref();
+    let storeRef = dbRef.child('store');
+    let customerRef = dbRef.child('customer');
+    let ticketRef = dbRef.child('ticket');
+    let adminRef = dbRef.child('admin');
+
+    let storeKey1 = null;
+    let storeKey2 = null;
+
+    let customerKey1 = null;
+
+    const initStores = [
+        {
+            type: 'farmacia',
+            title: 'Farmacia de Trianglen',
+            description: 'Me gusta las Farmacia de Dinamarka',
+            coordinates: {
+                latitude: 55.7000354,
+                longitude: 12.57803100000001
+            },
+            isOpen: false,
+            currentNumber: 0,
+            totalNumber: 0,
+            phoneNumber: 88888888,
+            openingHours: [
+                {
+                    day: 'M',
+                    hours: '10 - 19',
+                    value: 30,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 40,
+                },
+                {
+                    day: 'O',
+                    hours: '10 - 19',
+                    value: 50,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'F',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'L',
+                    hours: '10 - 19',
+                    value: 20,
+                },
+                {
+                    day: 'S',
+                    hours: '10 - 19',
+                    value: 30,
+                }
+            ]
+        },
+        {
+            type: 'farmacia',
+            title: 'Farmacia de Østerbrogade',
+            description: 'También me gusta esta farmacia',
+            coordinates: {
+                latitude: 55.7094258,
+                longitude: 12.577164799999991
+            },
+            isOpen: false,
+            currentNumber: 0,
+            totalNumber: 0,
+            phoneNumber: 88888888,
+            openingHours: [
+                {
+                    day: 'M',
+                    hours: '10 - 19',
+                    value: 30,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 40,
+                },
+                {
+                    day: 'O',
+                    hours: '10 - 19',
+                    value: 50,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'F',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'L',
+                    hours: '10 - 19',
+                    value: 20,
+                },
+                {
+                    day: 'S',
+                    hours: '10 - 19',
+                    value: 30,
+                }
+            ]
+        }
+    ]
+    const initCustomers = [
+        {
+            email: 'user1@gmail.com',
+            password: '1234',
+        },
+        {
+            email: 'user2@gmail.com',
+            password: '1234',
+        }
+    ]
+    const initOpeningHours = [
+        {
+            day: 'M',
+            hours: '10 - 19',
+            value: 30,
+        },
+        {
+            day: 'T',
+            hours: '10 - 19',
+            value: 40,
+        },
+        {
+            day: 'O',
+            hours: '10 - 19',
+            value: 50,
+        },
+        {
+            day: 'T',
+            hours: '10 - 19',
+            value: 60,
+        },
+        {
+            day: 'F',
+            hours: '10 - 19',
+            value: 60,
+        },
+        {
+            day: 'L',
+            hours: '10 - 19',
+            value: 20,
+        },
+        {
+            day: 'S',
+            hours: '10 - 19',
+            value: 30,
+        }
+    ]
+
+    //clears database:
+    dbRef.set({});
+
+    initStores.forEach((store) => {
+        let key = storeRef.push(store).key;
+        //initOpeningHours.forEach((opening) => {
+        //    storeRef.child(key).child('openingHours').push(opening);
+        //})
+    });
+    initCustomers.forEach((customer) => {
+        customerKey1 = customerRef.push(customer).key;
+    })
+    //get specific stores
+    storeRef.orderByChild('title').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
+        storeKey1 = child.key
+    });
+    storeRef.orderByChild('title').equalTo('Farmacia de Østerbrogade').once('child_added', (child) => {
+        storeKey2 = child.key
+    });
+
+    const initTicket = {
+        q_number: 1,
+        storeKey: storeKey1,
+        customerKey: customerKey1
+    }
+
+    const initAdmins = [
+        {
+            email: 'admin1@gmail.com',
+            password: '1234',
+            storeKey: storeKey1,
+        },
+        {
+            email: 'admin2@gmail.com',
+            password: '1234',
+            storeKey: storeKey2,
+        }
+    ]
+
+    initAdmins.forEach((admin) => {
+        adminRef.push(admin);
+    });
+
+    ticketRef.push(initTicket);
+
+}
+
