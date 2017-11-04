@@ -59,6 +59,7 @@ export default class App extends Component {
     render() {
         console.disableYellowBox = true;
       //resetDB();
+
     return (
       <Router>
         <Scene key="root" hideNavBar={true}>

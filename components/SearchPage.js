@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
+import {Modal} from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as firebase from 'firebase';
 import { Dropdown } from 'react-native-material-dropdown';
+import  SearchResultModal from './SearchResultModal';
 
 const {
     View,
@@ -21,7 +23,8 @@ class SearchComponent extends Component{
             shortQueueSelected: false,
             selectedCategory: null,
             shortDistanceSelected: false,
-            searchString: ''
+            searchString: '',
+            modalVisible: false,
         };
     }
     updateSelectedCategory = (value) => {
@@ -32,22 +35,39 @@ class SearchComponent extends Component{
         console.log('searchpage props', this.props);
     }
 
+    toggleModal = () => {
+        this.setState({
+            modalVisible: !this.state.modalVisible
+        });
+    }
 
 
-    showResults(){
-        alert(this.state.searchString)
+
+    getData(Category, isNear, isShortQueue){
+        var storesRef = firebase.database().ref('store/');
+        if(Category !== null){
+            storesRef.orderByChild("category").on("child_added", function(data) {
+                console.log(data.val().name);
+            });
+        }
     }
 
     render(){
+        this.getData(this.state.selectedCategory)
+
         return(
             <View>
+
+                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.getData}>
+
+                </SearchResultModal>
+
 
                 <View style={styles.SearchSection}>
                     <Icon style={styles.SearchIcon} name={'magnifying-glass'} type={'entypo'} color={'#000'}/>
                     <TextInput style={styles.SearchTextInput} placeholder="Søg" onChangeText={(searchString) => {this.setState({searchString})}}/>
 
                 </View>
-
 
 
                 <View style={styles.SwitchContainer}>
@@ -78,19 +98,22 @@ class SearchComponent extends Component{
                 <View style={styles.DropDownSection} >
                     <Text style={styles.DropDownText}>Kategori</Text>
                     <View style={styles.DropDownContainer}>
-                        <Dropdown  dropdownPosition={0}  style={styles.DropdownMenu} fontSize={15}  data={[{value:'Apotek'}, {value:'Bank'}, {value:'Stadion'}]}
+                        <Dropdown  dropdownPosition={0}  style={styles.DropdownMenu} fontSize={15}  data={[{value:'drugstore'}, {value:'bank'}, {value:'Stadion'}]}
                                    onChangeText={this.updateSelectedCategory.bind(this)}>
                         </Dropdown>
                     </View>
                 </View>
 
+
                 <View style={{padding: 40, paddingTop: '30%', backgroundColor: '#fff',}}>
-                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> alert(this.state.selectedCategory)}>
+                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({modalVisible: true})}}>
                         <View>
                             <Text style={{padding: 5, color: '#fff'}}>Vis Resultater</Text>
                         </View>
                     </TouchableHighlight>
                 </View>
+
+
 
 
                 <View style={{height: '100%', backgroundColor: '#fff'}}/>
