@@ -92,7 +92,7 @@ class ShopOwner extends Component {
 	}
 
 	_open_close_Q() {
-		// Updates the status of the queue
+		// Updates the status of the queue.
 		{this.state.q_status?
 			this.q_ref.update({q_open: 0}):this.q_ref.update({q_open: 1})} 
 		// resets the current queue number to 0, when queue is opened
