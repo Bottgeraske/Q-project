@@ -50,7 +50,6 @@ class SearchComponent extends Component{
             returnArr.push(item)
 
         });
-
         return returnArr
     }
 
@@ -85,30 +84,19 @@ class SearchComponent extends Component{
         }
 
 
-
-        //Then for each store_key, find out how many tickets have a reference to this store.
-            //Then filter the tickets based on whether they are active or not.
-            //Push the store if the amount of active tickets are < 5.
+        //If shortqueue is selected then apply shortqueuefilter to stores
         if(isShortQueue){
-            console.log('before filter', stores)
             stores = stores.filter(applyShortQueueFilter)
-            console.log('after filter', stores)
         }
 
 
-
-
-
-
-
+        //For each store_key, find out how many tickets have a reference to this store.
+        //Then filter the tickets based on whether they are active or not.
+        //Push the store if the amount of active tickets are < 5.
         function applyShortQueueFilter(store) {
             let activeTickets = 0;
-            console.log('printer her', store)
             ticketRef.orderByChild('store_key').equalTo(store.key).on('value', (snapshot) => {
                 activeTickets = 0;
-                console.log(0, snapshot)
-
-                console.log('1',store.category)
 
                 //For each ticket, check if it is active
                 snapshot.forEach((child) => {
@@ -118,16 +106,8 @@ class SearchComponent extends Component{
                     }
                 })
             })
-            console.log('active tickets in store with key ', store.key, ": ", activeTickets)
-            return activeTickets < 2
+            return activeTickets < 5
         }
-
-
-
-
-
-
-
 
 
     }
