@@ -8,45 +8,28 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
 import { Icon } from 'react-native-elements';
-import ComponentTest from './components/ComponentTest';
 import ShopOwner from './components/ShopOwner';
 import Authentication from './components/Authentication';
 import SearchPage from './components/SearchPage'
+import MapsPage from './components/MapsPage'
+
 import {
-  Platform,
   StyleSheet,
   Text,
-  View
 } from 'react-native';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA-xu1UtsOBmkGDG2wuzNe2-WA6YrcASYA",
-  authDomain: "testdemo-20978.firebaseapp.com",
-  databaseURL: "https://testdemo-20978.firebaseio.com",
-  projectId: "testdemo-20978",
-  storageBucket: "testdemo-20978.appspot.com",
-  messagingSenderId: "410211494997"
+    apiKey: "AIzaSyAlcAVowiuTK8SFOaPN42nVNuzsHrPboRE",
+    authDomain: "queueme-b24c2.firebaseapp.com",
+    databaseURL: "https://queueme-b24c2.firebaseio.com",
+    projectId: "queueme-b24c2",
+    storageBucket: "queueme-b24c2.appspot.com",
+    messagingSenderId: "319175123060"
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 console.ignoredYellowBox = [
   "Setting a timer"
 ];
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-const MenuIcon = () => {
-  return (
-    <Icon
-    name='menu'
-    type='material-community'
-    color='#333333' />
-  );
-}
 
 const TabIcon = ({ focused, title, type }) => {
   return (
@@ -57,13 +40,6 @@ const TabIcon = ({ focused, title, type }) => {
   );
 }
 
-const scene1 = (props) => {
-  return (
-    <Text>
-      Hej Morten og Kapper!! FUCK
-    </Text>
-  );
-}
 
 const scene2 = (props) => {
   return (
@@ -76,21 +52,22 @@ const scene2 = (props) => {
 
 
 export default class App extends Component {
-  render() {
-      resetDB();
-      console.disableYellowBox = true;
+    render() {
+        console.disableYellowBox = true;
+      //resetDB();
+
     return (
       <Router>
         <Scene key="root" hideNavBar={true}>
-					<Scene
-						component={Authentication}
-						key='Authentication'
-						title='Authentication'
+            <Scene
+                component={Authentication}
+                key='Authentication'
+                title='Authentication'
           />
           <Scene
-							component={ShopOwner}
-							key='ShopOwner'
-							title='ShopOwner'
+            component={ShopOwner}
+            key='ShopOwner'
+            title='ShopOwner'
           />
           <Tabs
             key='Tabbar'
@@ -120,7 +97,7 @@ export default class App extends Component {
               <Scene
                 key="MapPage"
                 title="MapPage"
-                component={scene1}
+                component={MapsPage}
                 />
             </Scene>
             <Scene
@@ -143,46 +120,15 @@ export default class App extends Component {
               <Scene
                 key="AccountPage"
                 title="AccountPage"
-                component={ComponentTest}
+                component={scene2}
                 />
             </Scene>
           </Tabs>
         </Scene>
       </Router>
-      //<View style={styles.container}>
-      //  <Text style={styles.welcome}>
-      //    Welcome to React Native!
-      //  </Text>
-      //  <Text style={styles.instructions}>
-      //    To get started, edit App.js
-      //  </Text>
-      //  <Text style={styles.instructions}>
-      //    {instructions}
-      //  </Text>
-      //</View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
 
 function resetDB() {
     alert('resetDB is run');
@@ -199,7 +145,7 @@ function resetDB() {
 
     const initStores = [
         {
-            category: 'bank',
+            type: 'farmacia',
             title: 'Farmacia de Trianglen',
             description: 'Me gusta las Farmacia de Dinamarka',
             coordinates: {
@@ -249,7 +195,7 @@ function resetDB() {
             ]
         },
         {
-            category: 'drugstore',
+            type: 'farmacia',
             title: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
             coordinates: {
@@ -394,3 +340,21 @@ function resetDB() {
 
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+});
