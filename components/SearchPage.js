@@ -26,6 +26,10 @@ class SearchComponent extends Component{
     }
     updateSelectedCategory = (value) => {
         this.setState({selectedCategory: value})
+    };
+
+    componentDidMount() {
+        console.log('searchpage props', this.props);
     }
 
 

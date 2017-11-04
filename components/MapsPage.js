@@ -21,7 +21,7 @@ class MapsPage extends Component {
                 {
                     key: 'F1',
                     type: 'farmacia',
-                    title: 'Farmacia de Trianglen',
+                    name: 'Farmacia de Trianglen',
                     description: 'Me gusta las Farmacia de Dinamarka',
                     coordinates: {
                         latitude: 55.7000354,
@@ -68,7 +68,7 @@ class MapsPage extends Component {
                 {
                     key: 'F2',
                     type: 'farmacia',
-                    title: 'Farmacia de Østerbrogade',
+                    name: 'Farmacia de Østerbrogade',
                     description: 'También me gusta esta farmacia',
                     coordinates: {
                         latitude: 55.7094258,
@@ -127,8 +127,6 @@ class MapsPage extends Component {
         this.getAllStores((stores) => {
             this.setState({allStores:stores})
         });
-        this.getDemoCustomer();
-
     }
 
     getAllStores(cb) {
@@ -136,20 +134,9 @@ class MapsPage extends Component {
         this.storesRef.orderByKey().on('child_added', (stores) => {
             let store = stores.val();
             store._key = stores.key;
-            console.log(stores.key);
-            console.log(store);
             _stores.push(store);
             cb(_stores)
         });
-    }
-
-    getDemoCustomer() {
-        this.customersRef.limitToFirst(1).once('child_added', (customer) => {
-            let _customer = customer.val();
-            _customer.key = customer.key;
-            this.setState({customer:_customer});
-        })
-
     }
 
     getCurrentLocation() {
@@ -174,13 +161,14 @@ class MapsPage extends Component {
 
     drawTicket(store) {
         this.ticketsRef.orderByKey().limitToLast(1).once('child_added', (ticket) => {
-            let latestNumber = ticket.val().q_number;
+            let latestNumber = ticket.val().ticketNumber;
             this.ticketsRef.push({
                 storeKey: store._key,
-                customerKey: this.state.customer.key,
-                q_number: latestNumber+1
+                customerKey: this.props.customer.key,
+                ticketNumber: latestNumber+1,
+                isActive: 1
             });
-            alert('You are now in line at '+store.title+' with ticket number '+(latestNumber+1))
+            alert('You are now in line at '+store.name+' with ticket number '+(latestNumber+1))
 
         });
     }
@@ -206,7 +194,7 @@ class MapsPage extends Component {
                                         <Text
                                             style={{fontSize:20, textAlign: 'center' }}
                                         >
-                                            {store.title}
+                                            {store.name}
                                         </Text>
                                         <Text style={{color: 'grey'}}
                                         >

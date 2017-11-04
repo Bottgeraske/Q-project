@@ -52,10 +52,13 @@ const scene2 = (props) => {
 
 
 export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
     render() {
         console.disableYellowBox = true;
       //resetDB();
-      console.disableYellowBox = true;
     return (
       <Router>
         <Scene key="root" hideNavBar={true}>
@@ -145,14 +148,14 @@ function resetDB() {
 
     const initStores = [
         {
-            type: 'farmacia',
-            title: 'Farmacia de Trianglen',
+            category: 'farmacia',
+            name: 'Farmacia de Trianglen',
             description: 'Me gusta las Farmacia de Dinamarka',
             coordinates: {
                 latitude: 55.7000354,
                 longitude: 12.57803100000001
             },
-            isOpen: false,
+            isOpen: true,
             currentNumber: 0,
             totalNumber: 0,
             phoneNumber: 88888888,
@@ -195,14 +198,14 @@ function resetDB() {
             ]
         },
         {
-            type: 'farmacia',
-            title: 'Farmacia de Østerbrogade',
+            category: 'farmacia',
+            name: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
             coordinates: {
                 latitude: 55.7094258,
                 longitude: 12.577164799999991
             },
-            isOpen: false,
+            isOpen: true,
             currentNumber: 0,
             totalNumber: 0,
             phoneNumber: 88888888,
@@ -306,17 +309,18 @@ function resetDB() {
         customerKey1 = customerRef.push(customer).key;
     })
     //get specific stores
-    storeRef.orderByChild('title').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
+    storeRef.orderByChild('name').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
         storeKey1 = child.key
     });
-    storeRef.orderByChild('title').equalTo('Farmacia de Østerbrogade').once('child_added', (child) => {
+    storeRef.orderByChild('name').equalTo('Farmacia de Østerbrogade').once('child_added', (child) => {
         storeKey2 = child.key
     });
 
     const initTicket = {
-        q_number: 1,
+        ticketNumber: 1,
         storeKey: storeKey1,
-        customerKey: customerKey1
+        customerKey: customerKey1,
+        isActive: 1
     }
 
     const initAdmins = [
