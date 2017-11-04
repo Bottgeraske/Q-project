@@ -199,7 +199,7 @@ function resetDB() {
 
     const initStores = [
         {
-            type: 'farmacia',
+            category: 'bank',
             title: 'Farmacia de Trianglen',
             description: 'Me gusta las Farmacia de Dinamarka',
             coordinates: {
@@ -249,7 +249,7 @@ function resetDB() {
             ]
         },
         {
-            type: 'farmacia',
+            category: 'drugstore',
             title: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
             coordinates: {
