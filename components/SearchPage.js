@@ -37,19 +37,103 @@ class SearchComponent extends Component{
         });
     }
 
+    getStores(){
+        return firebase.database().ref("store/")
+    }
+
+    snapshotToArray(snapshot){
+        var returnArr = [];
+        snapshot.forEach(function(childSnapshot) {
+            var item = childSnapshot.val();
+            item.key = childSnapshot.key;
+
+            returnArr.push(item)
+
+        });
+
+        return returnArr
+    }
+
 
 
     getData(Category, isNear, isShortQueue){
-        var storesRef = firebase.database().ref('store/');
+        var storesRef = this.getStores();
+        var ticketRef = firebase.database().ref('ticket')
+
+        var stores = [];
+
+        Category = null;
+
+        //If category is selected, filter database on selected category and save to stores
         if(Category !== null){
-            storesRef.orderByChild("category").on("child_added", function(data) {
-                console.log(data.val().name);
+
+            storesRef.orderByChild('category').equalTo(Category).on('value', (snapshot) => {
+                stores = this.snapshotToArray(snapshot);
+                console.log('category filter', stores)
+
+            }), function (error) {
+                console.log("Error: " + error.code);
+            };
+        }
+
+        //No category selected. Get all stores and save them in stores
+        else {
+            storesRef.orderByKey().on('value', (snapshot) => {
+                stores = this.snapshotToArray(snapshot)
+                console.log('category = null', stores)
             });
         }
+
+
+
+        //Then for each store_key, find out how many tickets have a reference to this store.
+            //Then filter the tickets based on whether they are active or not.
+            //Push the store if the amount of active tickets are < 5.
+        if(isShortQueue){
+            console.log('before filter', stores)
+            stores = stores.filter(applyShortQueueFilter)
+            console.log('after filter', stores)
+        }
+
+
+
+
+
+
+
+        function applyShortQueueFilter(store) {
+            let activeTickets = 0;
+            console.log('printer her', store)
+            ticketRef.orderByChild('store_key').equalTo(store.key).on('value', (snapshot) => {
+                activeTickets = 0;
+                console.log(0, snapshot)
+
+                console.log('1',store.category)
+
+                //For each ticket, check if it is active
+                snapshot.forEach((child) => {
+                    console.log(2,'biletter',store.category)
+                    if(child.val().is_active){
+                        activeTickets ++;
+                    }
+                })
+            })
+            console.log('active tickets in store with key ', store.key, ": ", activeTickets)
+            return activeTickets < 2
+        }
+
+
+
+
+
+
+
+
+
     }
 
     render(){
-        this.getData(this.state.selectedCategory)
+        this.getData(this.state.selectedCategory, null, this.state.shortQueueSelected)
 
         return(
             <View>

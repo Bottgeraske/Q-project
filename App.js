@@ -19,12 +19,12 @@ import {
 } from 'react-native';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAlcAVowiuTK8SFOaPN42nVNuzsHrPboRE",
-    authDomain: "queueme-b24c2.firebaseapp.com",
-    databaseURL: "https://queueme-b24c2.firebaseio.com",
-    projectId: "queueme-b24c2",
-    storageBucket: "queueme-b24c2.appspot.com",
-    messagingSenderId: "319175123060"
+    apiKey: "AIzaSyA-xu1UtsOBmkGDG2wuzNe2-WA6YrcASYA",
+    authDomain: "testdemo-20978.firebaseapp.com",
+    databaseURL: "https://testdemo-20978.firebaseio.com",
+    projectId: "testdemo-20978",
+    storageBucket: "testdemo-20978.appspot.com",
+    messagingSenderId: "410211494997"
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 console.ignoredYellowBox = [
@@ -54,7 +54,7 @@ const scene2 = (props) => {
 export default class App extends Component {
     render() {
         console.disableYellowBox = true;
-      //resetDB();
+        //resetDB();
 
     return (
       <Router>
@@ -145,7 +145,7 @@ function resetDB() {
 
     const initStores = [
         {
-            type: 'farmacia',
+            category: 'bank',
             title: 'Farmacia de Trianglen',
             description: 'Me gusta las Farmacia de Dinamarka',
             coordinates: {
@@ -195,7 +195,7 @@ function resetDB() {
             ]
         },
         {
-            type: 'farmacia',
+            category: 'drugstore',
             title: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
             coordinates: {
