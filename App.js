@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import {Router, Scene, Tabs, Switch} from 'react-native-router-flux';
+import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
 import { Icon } from 'react-native-elements';
 import ShopOwner from './components/ShopOwner';
 import Authentication from './components/Authentication';
