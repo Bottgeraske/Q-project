@@ -114,12 +114,12 @@ class MapsPage extends Component {
                 }
             ],
             modalVisible: false,
-            /*region: {
+            region: {
                 latitude: 37.78825,
                 longitude: -122.4324,
                 latitudeDelta: 0.00922*0.5,
                 longitudeDelta: 0.00421*0.5
-            },*/
+            },
         }
     }
 

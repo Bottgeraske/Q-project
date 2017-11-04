@@ -32,7 +32,6 @@ class SearchComponent extends Component{
     };
 
     componentDidMount() {
-        console.log('searchpage props', this.props);
     }
 
     toggleModal = () => {
