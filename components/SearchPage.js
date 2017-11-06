@@ -31,6 +31,7 @@ class SearchComponent extends Component{
         };
     }
     updateSelectedCategory = (value) => {
+        if(value === ""){this.setState({selectedCategory: null})}
         this.setState({selectedCategory: value})
     }
 
@@ -212,7 +213,7 @@ class SearchComponent extends Component{
                 <View style={styles.DropDownSection} >
                     <Text style={styles.DropDownText}>Kategori</Text>
                     <View style={styles.DropDownContainer}>
-                        <Dropdown  dropdownPosition={0}  style={styles.DropdownMenu} fontSize={15}  data={[{value:'drugstore'}, {value:'bank'}, {value:'Stadion'}]}
+                        <Dropdown  dropdownPosition={0}  style={styles.DropdownMenu} fontSize={15}  data={[{value: ""}, {value:'drugstore'}, {value:'bank'}, {value:'Stadion'}]}
                                    onChangeText={this.updateSelectedCategory.bind(this)}>
                         </Dropdown>
                     </View>
