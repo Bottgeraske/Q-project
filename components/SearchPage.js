@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { Dropdown } from 'react-native-material-dropdown';
 import  SearchResultModal from './SearchResultModal';
 
+
 const {
     View,
     Text,
@@ -25,6 +26,8 @@ class SearchComponent extends Component{
             shortDistanceSelected: false,
             searchString: '',
             modalVisible: false,
+          //Todo: currentPos should probably be updated when switching on shortDistance, but this results in async errors
+            currentPos: this.updateCurrentPosition()
         };
     }
     updateSelectedCategory = (value) => {
@@ -37,7 +40,7 @@ class SearchComponent extends Component{
         });
     }
 
-    getStores(){
+    getStoresRef(){
         return firebase.database().ref("store/")
     }
 
@@ -55,11 +58,12 @@ class SearchComponent extends Component{
 
 
 
-    getData(Category, isNear, isShortQueue){
-        var storesRef = this.getStores();
+    getStores(Category, isShortDistance, isShortQueue){
+        var storesRef = this.getStoresRef();
         var ticketRef = firebase.database().ref('ticket')
 
         var stores = [];
+
 
         Category = null;
 
@@ -79,7 +83,6 @@ class SearchComponent extends Component{
         else {
             storesRef.orderByKey().on('value', (snapshot) => {
                 stores = this.snapshotToArray(snapshot)
-                console.log('category = null', stores)
             });
         }
 
@@ -87,6 +90,11 @@ class SearchComponent extends Component{
         //If shortqueue is selected then apply shortqueuefilter to stores
         if(isShortQueue){
             stores = stores.filter(applyShortQueueFilter)
+        }
+
+        // if shortdistance is selected then apply short distance filter
+        if(isShortDistance){
+            stores.filter(applyShortDistanceFilter, this)
         }
 
 
@@ -100,7 +108,6 @@ class SearchComponent extends Component{
 
                 //For each ticket, check if it is active
                 snapshot.forEach((child) => {
-                    console.log(2,'biletter',store.category)
                     if(child.val().is_active){
                         activeTickets ++;
                     }
@@ -109,16 +116,63 @@ class SearchComponent extends Component{
             return activeTickets < 5
         }
 
+        function applyShortDistanceFilter(store) {
+            let currentPos = this.state.currentPos;
+            let storePos = store.coordinates;
 
+            console.log(currentPos)
+
+            let distance = this.distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, storePos.latitude, storePos.longitude)
+            console.log('DISTANCE: ' , distance)
+
+            return distance < 5
+        }
+    }
+
+    //Methods for calculating distance between 2 coordinates.
+    // Code taken from: https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates#comment28165728_365853
+
+    degreesToRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+        var earthRadiusKm = 6371;
+
+        var dLat = this.degreesToRadians(lat2-lat1);
+        var dLon = this.degreesToRadians(lon2-lon1);
+
+        lat1 = this.degreesToRadians(lat1);
+        lat2 = this.degreesToRadians(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadiusKm * c;
+    }
+
+
+    updateCurrentPosition() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log(4, 'getCurrentLocation')
+            let region = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+            this.setState({currentPos: region});
+        },
+            (error) => console.error(error),
+            { enableHighAccuracy: true, timeout: 30000, maximumAge: 1000 },
+        );
     }
 
     render(){
-        this.getData(this.state.selectedCategory, null, this.state.shortQueueSelected)
+        this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)
 
         return(
             <View>
 
-                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.getData}>
+                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.getStores}>
 
                 </SearchResultModal>
 
@@ -172,8 +226,6 @@ class SearchComponent extends Component{
                         </View>
                     </TouchableHighlight>
                 </View>
-
-
 
 
                 <View style={{height: '100%', backgroundColor: '#fff'}}/>
