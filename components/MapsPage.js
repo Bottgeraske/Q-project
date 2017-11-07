@@ -3,7 +3,6 @@ import ReactNative from 'react-native';
 const {
     View,
     Dimensions,
-    Modal,
     Text,
     TouchableHighlight,} = ReactNative;
 import MapView from 'react-native-maps';
@@ -17,103 +16,6 @@ class MapsPage extends Component {
         this.customersRef = firebase.database().ref().child('customer');
         this.state = {
             allStores: [],
-            pharmacies: [
-                {
-                    key: 'F1',
-                    type: 'farmacia',
-                    name: 'Farmacia de Trianglen',
-                    description: 'Me gusta las Farmacia de Dinamarka',
-                    coordinates: {
-                        latitude: 55.7000354,
-                        longitude: 12.57803100000001
-                    },
-                    openingHours: [
-                        {
-                            day: 'M',
-                            hours: '10 - 19',
-                            value: 30,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 40,
-                        },
-                        {
-                            day: 'O',
-                            hours: '10 - 19',
-                            value: 50,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'F',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'L',
-                            hours: '10 - 19',
-                            value: 20,
-                        },
-                        {
-                            day: 'S',
-                            hours: '10 - 19',
-                            value: 30,
-                        }
-                    ]
-                },
-                {
-                    key: 'F2',
-                    type: 'farmacia',
-                    name: 'Farmacia de Østerbrogade',
-                    description: 'También me gusta esta farmacia',
-                    coordinates: {
-                        latitude: 55.7094258,
-                        longitude: 12.577164799999991
-                    },
-                    openingHours: [
-                        {
-                            day: 'M',
-                            hours: '10 - 19',
-                            value: 30,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 40,
-                        },
-                        {
-                            day: 'O',
-                            hours: '10 - 19',
-                            value: 50,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'F',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'L',
-                            hours: '10 - 19',
-                            value: 20,
-                        },
-                        {
-                            day: 'S',
-                            hours: '10 - 19',
-                            value: 30,
-                        }
-                    ]
-                }
-            ],
-            modalVisible: false,
             region: {
                 latitude: 37.78825,
                 longitude: -122.4324,
@@ -124,18 +26,17 @@ class MapsPage extends Component {
     }
 
     componentDidMount() {
-        this.getAllStores((stores) => {
-            this.setState({allStores:stores})
-        });
+        this.getAllStores();
     }
 
-    getAllStores(cb) {
-        let _stores = []
-        this.storesRef.orderByKey().on('child_added', (stores) => {
-            let store = stores.val();
-            store._key = stores.key;
-            _stores.push(store);
-            cb(_stores)
+    getAllStores() {
+        this.storesRef.orderByKey().once('value', (stores) => {
+            let _stores = [];
+            stores.forEach((store) => {
+                store._key = stores.key;
+                _stores.push(store.val());
+            });
+            this.setState({allStores: _stores});
         });
     }
 

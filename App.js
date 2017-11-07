@@ -13,6 +13,7 @@ import Authentication from './components/Authentication';
 import SearchPage from './components/SearchPage'
 import MapsPage from './components/MapsPage'
 import AccountPage from './components/AccountPage'
+import QueueView from './components/QueueView'
 
 import {
   StyleSheet,
@@ -41,21 +42,9 @@ const TabIcon = ({ focused, title, type }) => {
   );
 }
 
-
-const scene2 = (props) => {
-  return (
-    <Text>
-      To get started, edit index.ios.js
-    </Text>
-  );
-}
-
-
-
 export default class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
     }
     render() {
         console.disableYellowBox = true;
@@ -114,7 +103,7 @@ export default class App extends Component {
               <Scene
                 key="QueuePage"
                 title="QueuePage"
-                component={scene2}
+                component={QueueView}
                 />
             </Scene>
             <Scene
