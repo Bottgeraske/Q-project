@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Modal, Text, TouchableHighlight, View, StyleSheet } from 'react-native';
+import { Modal, Text, TouchableHighlight, View, StyleSheet, FlatList, } from 'react-native';
+import {ListItem, Icon} from 'react-native-elements';
 
 class SearchResultModal extends Component {
 
@@ -8,18 +9,65 @@ class SearchResultModal extends Component {
         super(props);
     }
 
+    getIcon(category){
+        console.log(category)
+
+        switch (category){
+            case 'drugstore':
+                return (<Icon name={'heart'} type={'entypo'} color={'#000'}/>)
+
+            case 'bank':
+                return (<Icon name={'credit'} type={'entypo'} color={'#000'}/>)
+
+            case 'stadion':
+                return (<Icon name={'sports-club'} type={'entypo'} color={'#000'}/>)
+
+            default:
+                return (<Icon name={'rotate-right'} type={'FontAwesome'} color={'#000'}/>)
+
+        }
+    }
+
     render() {
         if(this.props.modalVisible === false){
             return null;
         }
+        console.log(1, this.props.data)
 
         return (
             <View>
                 <Modal visible={this.props.modalVisible} animationType='slide' transparent={false}>
-                    <Text style={{marginTop: 50}}>What up</Text>
+                    <Text> WHAT UP </Text>
+                    <Text> WHAT UP </Text>
+                    <Text> WHAT UP </Text>
+
+                    <View>
+                        <FlatList
+                            data={this.props.data}
+                            renderItem={({ item }) => (
+
+                                <ListItem
+                                    //roundAvatar
+                                    // avatar={<Icon style={styles.SearchIcon} name={'magnifying-glass'} type={'entypo'} color={'#000'}/>}
+                                    avatar={this.getIcon(item.category)}
+                                    title={item.title}
+                                    subtitle={item.description}
+                                    //avatar={{ uri: item.picture.thumbnail }}
+                                />
+                            )}
+                        />
+                    </View>
+
+
+
+
+
                     <TouchableHighlight onPress={this.props.onClose} style={styles.Button}>
                         <Text style={{color: '#fff'}}>Back</Text>
                     </TouchableHighlight>
+
+
+
                 </Modal>
             </View>
         );

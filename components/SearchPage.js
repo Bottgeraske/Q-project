@@ -27,7 +27,8 @@ class SearchComponent extends Component{
             searchString: '',
             modalVisible: false,
           //Todo: currentPos should probably be updated when switching on shortDistance, but this results in async errors
-            currentPos: this.updateCurrentPosition()
+            currentPos: this.updateCurrentPosition(),
+            stores: null
         };
     }
     updateSelectedCategory = (value) => {
@@ -66,7 +67,6 @@ class SearchComponent extends Component{
         var stores = [];
 
 
-        Category = null;
 
         //If category is selected, filter database on selected category and save to stores
         if(Category !== null){
@@ -97,6 +97,8 @@ class SearchComponent extends Component{
         if(isShortDistance){
             stores.filter(applyShortDistanceFilter, this)
         }
+
+        return stores;
 
 
         //For each store_key, find out how many tickets have a reference to this store.
@@ -168,12 +170,12 @@ class SearchComponent extends Component{
     }
 
     render(){
-        this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)
+        //this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)
 
         return(
             <View>
 
-                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.getStores}>
+                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.state.stores}>
 
                 </SearchResultModal>
 
@@ -221,7 +223,7 @@ class SearchComponent extends Component{
 
 
                 <View style={{padding: 40, paddingTop: '30%', backgroundColor: '#fff',}}>
-                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({modalVisible: true})}}>
+                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({modalVisible: true, stores: this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)})}}>
                         <View>
                             <Text style={{padding: 5, color: '#fff'}}>Vis Resultater</Text>
                         </View>
