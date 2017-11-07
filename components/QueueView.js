@@ -11,12 +11,17 @@ const {
 const ListItem = ({item, onPress}) => {
     return(
         <TouchableHighlight
-            onPress={onPress}
             style={styles.listItem}
         >
             <View>
                 <Text style={{fontSize:20}}>{item.storeName}</Text>
                 <Text style={{fontStyle:'italic'}}>Nummer:</Text><Text>{item.ticketNumber}</Text>
+                <TouchableHighlight
+                    style={styles.listItemButton}
+                    onPress={onPress}
+                >
+                    <Text>Afmeld kø</Text>
+                </TouchableHighlight>
             </View>
         </TouchableHighlight>
     );
@@ -45,12 +50,21 @@ class QueueView extends Component {
                 if(_ticket.isActive) {
                     this.storesRef.orderByKey().equalTo(_ticket.storeKey).once('child_added', (store) => {
                         _ticket.storeName = store.val().name;
+                        _ticket._key = ticket.key;
                         activeTickets.push(_ticket);
                         //this runs every time, should be optimized
                         this.setState({activeTickets: activeTickets});
                     });
                 }
             });
+        });
+    }
+
+    leaveQueue(ticket) {
+        console.log('leaveQueue:',ticket)
+        firebase.database().ref().child('ticket/'+ticket._key).update({isActive: 0}).then(() => {
+            this.getActiveQueues();
+            alert('You have succesfully left the queue at ' + ticket.storeName);
         });
     }
 
@@ -63,7 +77,7 @@ class QueueView extends Component {
                     renderItem={({item}) => <ListItem
                         item={item}
                         onPress={() => {
-                            alert(item.storeName);
+                            this.leaveQueue(item);
                         }}
                     />}
 
@@ -79,6 +93,10 @@ const styles = {
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: '#d6d7da',
+    },
+
+    listItemButton: {
+
     }
 }
 
