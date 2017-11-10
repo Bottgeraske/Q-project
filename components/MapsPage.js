@@ -27,17 +27,32 @@ class MapsPage extends Component {
 
     componentDidMount() {
         this.getAllStores();
+        this.getCurrentLocation();
     }
 
     getAllStores() {
         this.storesRef.orderByKey().once('value', (stores) => {
             let _stores = [];
             stores.forEach((store) => {
-                store._key = stores.key;
-                _stores.push(store.val());
+                store._key = store.key;
+                _stores.push(store);
             });
             this.setState({allStores: _stores});
         });
+    }
+
+    getStoreQueue(storeKey){
+        console.log(2, storeKey);
+        let activePeople = 0;
+        this.ticketsRef.orderByChild('storeKey').equalTo(storeKey).on('value', (tickets) => {
+            tickets.forEach((ticket) => {
+                console.log(1, ticket);
+                if (ticket.val().isActive) {
+                    activePeople++
+                }
+            });
+        });
+        return activePeople
     }
 
     getCurrentLocation() {
@@ -61,6 +76,8 @@ class MapsPage extends Component {
     }
 
     drawTicket(store) {
+        console.log(5, store);
+        console.table(this.state.allStores)
         this.ticketsRef.orderByKey().limitToLast(1).once('child_added', (ticket) => {
             let latestNumber = ticket.val().ticketNumber;
             this.ticketsRef.push({
@@ -70,7 +87,8 @@ class MapsPage extends Component {
                 isActive: 1
             });
             alert('You are now in line at '+store.name+' with ticket number '+(latestNumber+1))
-
+            //work-around to update current queue
+            this.setState(this.state);
         });
     }
 
@@ -85,26 +103,27 @@ class MapsPage extends Component {
                     onRegionChange={this.onRegionChange.bind(this)}
                 >
                     {this.state.allStores.map((store) => {
+                        let _store = store.val();
                         return(
                             <MapView.Marker
                                 style={{padding:20}}
-                                coordinate={store.coordinates}
+                                coordinate={_store.coordinates}
                             >
                                 <MapView.Callout>
                                     <View>
                                         <Text
                                             style={{fontSize:20, textAlign: 'center' }}
                                         >
-                                            {store.name}
+                                            {_store.name}
                                         </Text>
                                         <Text style={{color: 'grey'}}
                                         >
-                                            {store.description}
+                                            {_store.description}
                                         </Text>
                                         <View
                                             style={styles.openingHoursContainer}
                                         >
-                                            {store.openingHours.map((day) => {
+                                            {_store.openingHours.map((day) => {
                                                 return(
                                                     <View style={styles.openingHours}>
                                                         <View style={[styles.hoursColumn, {height: day['value']} ]}/>
@@ -113,7 +132,12 @@ class MapsPage extends Component {
                                                 )
                                             })}
 
+
                                         </View>
+                                        <Text style={styles.calloutQueue}>
+                                            {this.getStoreQueue(store._key)} personer i kø
+                                        </Text>
+
                                         <TouchableHighlight
                                             onPress={() => {
                                                 this.drawTicket(store);
@@ -121,7 +145,7 @@ class MapsPage extends Component {
                                             style={styles.drawTicketButton}
                                         >
                                             <Text style={styles.drawTicketText}>
-                                                Stil dig i fucking kø
+                                                Stil dig i kø
                                             </Text>
                                         </TouchableHighlight>
                                     </View>
@@ -155,7 +179,7 @@ const styles = {
         width:'100%',
         display:'flex',
         flexDirection:'row',
-        height:100,
+        height:80,
         alignItems: 'baseline',
         marginTop: 20,
     },
@@ -176,9 +200,13 @@ const styles = {
         alignItems: 'center',
         backgroundColor: '#7ba9f7',
         borderRadius: 10,
+        marginTop: 10,
     },
     drawTicketText: {
         padding:10,
+    },
+    calloutQueue: {
+        margin: 10,
     }
 
 
