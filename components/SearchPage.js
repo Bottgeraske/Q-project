@@ -61,12 +61,10 @@ class SearchComponent extends Component{
 
 
     getStores(Category, isShortDistance, isShortQueue){
-        var storesRef = this.getStoresRef();
-        var ticketRef = firebase.database().ref('ticket')
+        let storesRef = this.getStoresRef();
+        let ticketRef = firebase.database().ref('ticket')
 
-        var stores = [];
-
-
+        let stores = [];
 
 
         //If category is selected, filter database on selected category and save to stores
@@ -88,8 +86,6 @@ class SearchComponent extends Component{
             });
         }
 
-        console.log("hej", stores)
-
 
         //If shortqueue is selected then apply shortqueuefilter to stores
         if(isShortQueue){
@@ -98,7 +94,7 @@ class SearchComponent extends Component{
 
         // if shortdistance is selected then apply short distance filter
         if(isShortDistance){
-            stores.filter(applyShortDistanceFilter, this)
+            stores = stores.filter(applyShortDistanceFilter, this)
         }
 
         return stores;
@@ -123,39 +119,62 @@ class SearchComponent extends Component{
         }
 
         function applyShortDistanceFilter(store) {
-            let currentPos = this.state.currentPos;
+
+            let currentPos = this.state.currentPos
             let storePos = store.coordinates;
 
             console.log(currentPos)
 
-            let distance = this.distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, storePos.latitude, storePos.longitude)
+            let distance = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, storePos.latitude, storePos.longitude)
             console.log('DISTANCE: ' , distance)
 
+            distance = 6
+            console.log(distance < 5)
             return distance < 5
+        }
+
+        //Methods for calculating distance between 2 coordinates.
+        // Code taken from: https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates#comment28165728_365853
+        function degreesToRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
+
+        function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+            let earthRadiusKm = 6371;
+
+            let dLat = degreesToRadians(lat2-lat1);
+            let dLon = degreesToRadians(lon2-lon1);
+
+            lat1 = degreesToRadians(lat1);
+            lat2 = degreesToRadians(lat2);
+
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return earthRadiusKm * c;
         }
     }
 
-    //Methods for calculating distance between 2 coordinates.
-    // Code taken from: https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates#comment28165728_365853
 
-    degreesToRadians(degrees) {
-        return degrees * Math.PI / 180;
-    }
 
-    distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
-        var earthRadiusKm = 6371;
-
-        var dLat = this.degreesToRadians(lat2-lat1);
-        var dLon = this.degreesToRadians(lon2-lon1);
-
-        lat1 = this.degreesToRadians(lat1);
-        lat2 = this.degreesToRadians(lat2);
-
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return earthRadiusKm * c;
-    }
+    // degreesToRadians(degrees) {
+    //     return degrees * Math.PI / 180;
+    // }
+    //
+    // distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+    //     var earthRadiusKm = 6371;
+    //
+    //     var dLat = this.degreesToRadians(lat2-lat1);
+    //     var dLon = this.degreesToRadians(lon2-lon1);
+    //
+    //     lat1 = this.degreesToRadians(lat1);
+    //     lat2 = this.degreesToRadians(lat2);
+    //
+    //     var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    //         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+    //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    //     return earthRadiusKm * c;
+    // }
 
 
     updateCurrentPosition() {

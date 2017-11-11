@@ -7,6 +7,7 @@ class SearchResultModal extends Component {
 
     constructor(props){
         super(props);
+        this.state={loading: true,}
     }
 
     getIcon(category){
@@ -31,6 +32,7 @@ class SearchResultModal extends Component {
         if(this.props.modalVisible === false){
             return null;
         }
+
         console.log("This.props.data", this.props.data)
 
         return (
