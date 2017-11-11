@@ -33,6 +33,21 @@ class SearchResultModal extends Component {
             return null;
         }
 
+
+        if (!this.state.loading) {
+            return (
+                <ActivityIndicator
+                    animating={true}
+                    style={styles.indicator}
+                    size="large"
+                />
+            );
+        }
+
+
+
+
+
         console.log("This.props.data", this.props.data)
 
         return (
@@ -47,7 +62,7 @@ class SearchResultModal extends Component {
                                     //roundAvatar
                                     // avatar={<Icon style={styles.SearchIcon} name={'magnifying-glass'} type={'entypo'} color={'#000'}/>}
                                     avatar={this.getIcon(item.category)}
-                                    title={item.title}
+                                    title={item.name}
                                     subtitle={item.description}
                                     //avatar={{ uri: item.picture.thumbnail }}
                                 />

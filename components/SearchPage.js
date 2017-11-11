@@ -28,11 +28,14 @@ class SearchComponent extends Component{
             modalVisible: false,
           //Todo: currentPos should probably be updated when switching on shortDistance, but this results in async errors
             currentPos: this.updateCurrentPosition(),
-            stores: null
+            stores: this.getStores(null, false, false),
         };
     }
     updateSelectedCategory = (value) => {
-        if(value === ""){this.setState({selectedCategory: null})}
+        if(value === ""){
+            this.setState({selectedCategory: null})
+            return
+        }
         this.setState({selectedCategory: value})
     }
 
@@ -61,6 +64,7 @@ class SearchComponent extends Component{
 
 
     getStores(Category, isShortDistance, isShortQueue){
+        console.log('Call to getStores')
         let storesRef = this.getStoresRef();
         let ticketRef = firebase.database().ref('ticket')
 
@@ -128,8 +132,6 @@ class SearchComponent extends Component{
             let distance = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, storePos.latitude, storePos.longitude)
             console.log('DISTANCE: ' , distance)
 
-            distance = 6
-            console.log(distance < 5)
             return distance < 5
         }
 
@@ -156,27 +158,6 @@ class SearchComponent extends Component{
     }
 
 
-
-    // degreesToRadians(degrees) {
-    //     return degrees * Math.PI / 180;
-    // }
-    //
-    // distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
-    //     var earthRadiusKm = 6371;
-    //
-    //     var dLat = this.degreesToRadians(lat2-lat1);
-    //     var dLon = this.degreesToRadians(lon2-lon1);
-    //
-    //     lat1 = this.degreesToRadians(lat1);
-    //     lat2 = this.degreesToRadians(lat2);
-    //
-    //     var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    //         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-    //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    //     return earthRadiusKm * c;
-    // }
-
-
     updateCurrentPosition() {
         navigator.geolocation.getCurrentPosition((position) => {
             console.log(4, 'getCurrentLocation')
@@ -193,6 +174,7 @@ class SearchComponent extends Component{
 
     render(){
         //this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)
+        console.log('RENDER')
 
         return(
             <View>
@@ -245,7 +227,7 @@ class SearchComponent extends Component{
 
 
                 <View style={{padding: 40, paddingTop: '30%', backgroundColor: '#fff',}}>
-                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({modalVisible: true, stores: this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)})}}>
+                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({stores: this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected), modalVisible: true, })}}>
                         <View>
                             <Text style={{padding: 5, color: '#fff'}}>Vis Resultater</Text>
                         </View>
