@@ -3,7 +3,6 @@ import ReactNative from 'react-native';
 const {
     View,
     Dimensions,
-    Modal,
     Text,
     TouchableHighlight,} = ReactNative;
 import MapView from 'react-native-maps';
@@ -17,139 +16,43 @@ class MapsPage extends Component {
         this.customersRef = firebase.database().ref().child('customer');
         this.state = {
             allStores: [],
-            pharmacies: [
-                {
-                    key: 'F1',
-                    type: 'farmacia',
-                    title: 'Farmacia de Trianglen',
-                    description: 'Me gusta las Farmacia de Dinamarka',
-                    coordinates: {
-                        latitude: 55.7000354,
-                        longitude: 12.57803100000001
-                    },
-                    openingHours: [
-                        {
-                            day: 'M',
-                            hours: '10 - 19',
-                            value: 30,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 40,
-                        },
-                        {
-                            day: 'O',
-                            hours: '10 - 19',
-                            value: 50,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'F',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'L',
-                            hours: '10 - 19',
-                            value: 20,
-                        },
-                        {
-                            day: 'S',
-                            hours: '10 - 19',
-                            value: 30,
-                        }
-                    ]
-                },
-                {
-                    key: 'F2',
-                    type: 'farmacia',
-                    title: 'Farmacia de Østerbrogade',
-                    description: 'También me gusta esta farmacia',
-                    coordinates: {
-                        latitude: 55.7094258,
-                        longitude: 12.577164799999991
-                    },
-                    openingHours: [
-                        {
-                            day: 'M',
-                            hours: '10 - 19',
-                            value: 30,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 40,
-                        },
-                        {
-                            day: 'O',
-                            hours: '10 - 19',
-                            value: 50,
-                        },
-                        {
-                            day: 'T',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'F',
-                            hours: '10 - 19',
-                            value: 60,
-                        },
-                        {
-                            day: 'L',
-                            hours: '10 - 19',
-                            value: 20,
-                        },
-                        {
-                            day: 'S',
-                            hours: '10 - 19',
-                            value: 30,
-                        }
-                    ]
-                }
-            ],
-            modalVisible: false,
-            /*region: {
+            region: {
                 latitude: 37.78825,
                 longitude: -122.4324,
                 latitudeDelta: 0.00922*0.5,
                 longitudeDelta: 0.00421*0.5
-            },*/
+            },
         }
     }
 
     componentDidMount() {
-        this.getAllStores((stores) => {
-            this.setState({allStores:stores})
-        });
-        this.getDemoCustomer();
-
+        this.getAllStores();
+        this.getCurrentLocation();
     }
 
-    getAllStores(cb) {
-        let _stores = []
-        this.storesRef.orderByKey().on('child_added', (stores) => {
-            let store = stores.val();
-            store._key = stores.key;
-            console.log(stores.key);
-            console.log(store);
-            _stores.push(store);
-            cb(_stores)
+    getAllStores() {
+        this.storesRef.orderByKey().once('value', (stores) => {
+            let _stores = [];
+            stores.forEach((store) => {
+                store._key = store.key;
+                _stores.push(store);
+            });
+            this.setState({allStores: _stores});
         });
     }
 
-    getDemoCustomer() {
-        this.customersRef.limitToFirst(1).once('child_added', (customer) => {
-            let _customer = customer.val();
-            _customer.key = customer.key;
-            this.setState({customer:_customer});
-        })
-
+    getStoreQueue(storeKey){
+        console.log(2, storeKey);
+        let activePeople = 0;
+        this.ticketsRef.orderByChild('storeKey').equalTo(storeKey).on('value', (tickets) => {
+            tickets.forEach((ticket) => {
+                console.log(1, ticket);
+                if (ticket.val().isActive) {
+                    activePeople++
+                }
+            });
+        });
+        return activePeople
     }
 
     getCurrentLocation() {
@@ -173,15 +76,19 @@ class MapsPage extends Component {
     }
 
     drawTicket(store) {
+        console.log(5, store);
+        console.table(this.state.allStores)
         this.ticketsRef.orderByKey().limitToLast(1).once('child_added', (ticket) => {
-            let latestNumber = ticket.val().q_number;
+            let latestNumber = ticket.val().ticketNumber;
             this.ticketsRef.push({
                 storeKey: store._key,
-                customerKey: this.state.customer.key,
-                q_number: latestNumber+1
+                customerKey: this.props.customer.key,
+                ticketNumber: latestNumber+1,
+                isActive: 1
             });
-            alert('You are now in line at '+store.title+' with ticket number '+(latestNumber+1))
-
+            alert('You are now in line at '+store.name+' with ticket number '+(latestNumber+1))
+            //work-around to update current queue
+            this.setState(this.state);
         });
     }
 
@@ -196,26 +103,27 @@ class MapsPage extends Component {
                     onRegionChange={this.onRegionChange.bind(this)}
                 >
                     {this.state.allStores.map((store) => {
+                        let _store = store.val();
                         return(
                             <MapView.Marker
                                 style={{padding:20}}
-                                coordinate={store.coordinates}
+                                coordinate={_store.coordinates}
                             >
                                 <MapView.Callout>
                                     <View>
                                         <Text
                                             style={{fontSize:20, textAlign: 'center' }}
                                         >
-                                            {store.title}
+                                            {_store.name}
                                         </Text>
                                         <Text style={{color: 'grey'}}
                                         >
-                                            {store.description}
+                                            {_store.description}
                                         </Text>
                                         <View
                                             style={styles.openingHoursContainer}
                                         >
-                                            {store.openingHours.map((day) => {
+                                            {_store.openingHours.map((day) => {
                                                 return(
                                                     <View style={styles.openingHours}>
                                                         <View style={[styles.hoursColumn, {height: day['value']} ]}/>
@@ -224,7 +132,12 @@ class MapsPage extends Component {
                                                 )
                                             })}
 
+
                                         </View>
+                                        <Text style={styles.calloutQueue}>
+                                            {this.getStoreQueue(store._key)} personer i kø
+                                        </Text>
+
                                         <TouchableHighlight
                                             onPress={() => {
                                                 this.drawTicket(store);
@@ -232,7 +145,7 @@ class MapsPage extends Component {
                                             style={styles.drawTicketButton}
                                         >
                                             <Text style={styles.drawTicketText}>
-                                                Stil dig i fucking kø
+                                                Stil dig i kø
                                             </Text>
                                         </TouchableHighlight>
                                     </View>
@@ -266,7 +179,7 @@ const styles = {
         width:'100%',
         display:'flex',
         flexDirection:'row',
-        height:100,
+        height:80,
         alignItems: 'baseline',
         marginTop: 20,
     },
@@ -287,9 +200,13 @@ const styles = {
         alignItems: 'center',
         backgroundColor: '#7ba9f7',
         borderRadius: 10,
+        marginTop: 10,
     },
     drawTicketText: {
         padding:10,
+    },
+    calloutQueue: {
+        margin: 10,
     }
 
 

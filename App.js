@@ -6,12 +6,14 @@
 
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import {Drawer, Router, Scene, Tabs, Switch} from 'react-native-router-flux';
+import {Router, Scene, Tabs, Switch} from 'react-native-router-flux';
 import { Icon } from 'react-native-elements';
 import ShopOwner from './components/ShopOwner';
 import Authentication from './components/Authentication';
 import SearchPage from './components/SearchPage'
 import MapsPage from './components/MapsPage'
+import AccountPage from './components/AccountPage'
+import QueueView from './components/QueueView'
 
 import {
   StyleSheet,
@@ -40,21 +42,13 @@ const TabIcon = ({ focused, title, type }) => {
   );
 }
 
-
-const scene2 = (props) => {
-  return (
-    <Text>
-      To get started, edit index.ios.js
-    </Text>
-  );
-}
-
-
-
 export default class App extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         console.disableYellowBox = true;
-        //resetDB();
+      //resetDB();
 
     return (
       <Router>
@@ -109,7 +103,7 @@ export default class App extends Component {
               <Scene
                 key="QueuePage"
                 title="QueuePage"
-                component={scene2}
+                component={QueueView}
                 />
             </Scene>
             <Scene
@@ -118,9 +112,9 @@ export default class App extends Component {
               icon={TabIcon}
               >
               <Scene
+                component={AccountPage}
                 key="AccountPage"
                 title="AccountPage"
-                component={scene2}
                 />
             </Scene>
           </Tabs>
@@ -145,14 +139,64 @@ function resetDB() {
 
     const initStores = [
         {
-            category: 'bank',
-            title: 'Farmacia de Trianglen',
-            description: 'Me gusta las Farmacia de Dinamarka',
+            category: 'stadion',
+            name: 'Stadion de Trianglen',
+            description: 'Me gusta las stadione de Dinamarka',
             coordinates: {
                 latitude: 55.7000354,
                 longitude: 12.57803100000001
             },
-            isOpen: false,
+            isOpen: true,
+            currentNumber: 0,
+            totalNumber: 0,
+            phoneNumber: 88888888,
+            openingHours: [
+                {
+                    day: 'M',
+                    hours: '10 - 19',
+                    value: 30,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 40,
+                },
+                {
+                    day: 'O',
+                    hours: '10 - 19',
+                    value: 50,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'F',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'L',
+                    hours: '10 - 19',
+                    value: 20,
+                },
+                {
+                    day: 'S',
+                    hours: '10 - 19',
+                    value: 30,
+                }
+            ]
+        },
+        {
+            category: 'bank',
+            name: 'Los bankos de Trianglen',
+            description: 'Me gusta las bankos de Dinamarka',
+            coordinates: {
+                latitude: 55.7000354,
+                longitude: 12.57803100000001
+            },
+            isOpen: true,
             currentNumber: 0,
             totalNumber: 0,
             phoneNumber: 88888888,
@@ -196,13 +240,63 @@ function resetDB() {
         },
         {
             category: 'drugstore',
-            title: 'Farmacia de Østerbrogade',
+            name: 'Farmacia de Trianglen',
+            description: 'Me gusta las Farmacia de Dinamarka',
+            coordinates: {
+                latitude: 55.7000354,
+                longitude: 12.57803100000001
+            },
+            isOpen: true,
+            currentNumber: 0,
+            totalNumber: 0,
+            phoneNumber: 88888888,
+            openingHours: [
+                {
+                    day: 'M',
+                    hours: '10 - 19',
+                    value: 30,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 40,
+                },
+                {
+                    day: 'O',
+                    hours: '10 - 19',
+                    value: 50,
+                },
+                {
+                    day: 'T',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'F',
+                    hours: '10 - 19',
+                    value: 60,
+                },
+                {
+                    day: 'L',
+                    hours: '10 - 19',
+                    value: 20,
+                },
+                {
+                    day: 'S',
+                    hours: '10 - 19',
+                    value: 30,
+                }
+            ]
+        },
+        {
+            category: 'drugstore',
+            name: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
             coordinates: {
                 latitude: 55.7094258,
                 longitude: 12.577164799999991
             },
-            isOpen: false,
+            isOpen: true,
             currentNumber: 0,
             totalNumber: 0,
             phoneNumber: 88888888,
@@ -306,17 +400,18 @@ function resetDB() {
         customerKey1 = customerRef.push(customer).key;
     })
     //get specific stores
-    storeRef.orderByChild('title').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
+    storeRef.orderByChild('name').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
         storeKey1 = child.key
     });
-    storeRef.orderByChild('title').equalTo('Farmacia de Østerbrogade').once('child_added', (child) => {
+    storeRef.orderByChild('name').equalTo('Farmacia de Østerbrogade').once('child_added', (child) => {
         storeKey2 = child.key
     });
 
     const initTicket = {
-        q_number: 1,
+        ticketNumber: 1,
         storeKey: storeKey1,
-        customerKey: customerKey1
+        customerKey: customerKey1,
+        isActive: 1
     }
 
     const initAdmins = [

@@ -68,6 +68,7 @@ class SearchComponent extends Component{
 
 
 
+
         //If category is selected, filter database on selected category and save to stores
         if(Category !== null){
 
@@ -86,6 +87,8 @@ class SearchComponent extends Component{
                 stores = this.snapshotToArray(snapshot)
             });
         }
+
+        console.log("hej", stores)
 
 
         //If shortqueue is selected then apply shortqueuefilter to stores
@@ -215,7 +218,7 @@ class SearchComponent extends Component{
                 <View style={styles.DropDownSection} >
                     <Text style={styles.DropDownText}>Kategori</Text>
                     <View style={styles.DropDownContainer}>
-                        <Dropdown  dropdownPosition={0}  style={styles.DropdownMenu} fontSize={15}  data={[{value: ""}, {value:'drugstore'}, {value:'bank'}, {value:'Stadion'}]}
+                        <Dropdown  dropdownPosition={0}  style={styles.DropdownMenu} fontSize={15}  data={[{value: ""}, {value:'drugstore'}, {value:'bank'}, {value:'stadion'}]}
                                    onChangeText={this.updateSelectedCategory.bind(this)}>
                         </Dropdown>
                     </View>

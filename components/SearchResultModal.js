@@ -10,7 +10,6 @@ class SearchResultModal extends Component {
     }
 
     getIcon(category){
-        console.log(category)
 
         switch (category){
             case 'drugstore':
@@ -32,17 +31,13 @@ class SearchResultModal extends Component {
         if(this.props.modalVisible === false){
             return null;
         }
-        console.log(1, this.props.data)
+        console.log("This.props.data", this.props.data)
 
         return (
             <View>
                 <Modal visible={this.props.modalVisible} animationType='slide' transparent={false}>
-                    <Text> WHAT UP </Text>
-                    <Text> WHAT UP </Text>
-                    <Text> WHAT UP </Text>
-
                     <View>
-                        <FlatList
+                        <FlatList style={{marginTop: 40}}
                             data={this.props.data}
                             renderItem={({ item }) => (
 
