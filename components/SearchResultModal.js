@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Text, TouchableHighlight, View, StyleSheet, FlatList, } from 'react-native';
 import {ListItem, Icon} from 'react-native-elements';
+import {Actions} from 'react-native-router-flux';
 
 class SearchResultModal extends Component {
 
@@ -28,27 +29,13 @@ class SearchResultModal extends Component {
         }
     }
 
+
+
+
     render() {
         if(this.props.modalVisible === false){
             return null;
         }
-
-
-        if (!this.state.loading) {
-            return (
-                <ActivityIndicator
-                    animating={true}
-                    style={styles.indicator}
-                    size="large"
-                />
-            );
-        }
-
-
-
-
-
-        console.log("This.props.data", this.props.data)
 
         return (
             <View>
@@ -64,13 +51,24 @@ class SearchResultModal extends Component {
                                     avatar={this.getIcon(item.category)}
                                     title={item.name}
                                     subtitle={item.description}
+                                    onPress={() => {
+                                        //Close Modal
+                                        this.props.onClose();
+                                        //Switch to MapsPage
+                                        let selectedStore = [item]
+
+
+                                        Actions.MapTab({allStores: selectedStore})
+
+
+                                        // Actions.refresh()
+                                    }}
+
                                     //avatar={{ uri: item.picture.thumbnail }}
                                 />
                             )}
                         />
                     </View>
-
-
 
 
 

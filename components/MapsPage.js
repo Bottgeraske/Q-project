@@ -16,6 +16,7 @@ class MapsPage extends Component {
         this.customersRef = firebase.database().ref().child('customer');
         this.state = {
             allStores: [],
+            selectedStore: {},
             region: {
                 latitude: 37.78825,
                 longitude: -122.4324,
@@ -28,25 +29,55 @@ class MapsPage extends Component {
     componentDidMount() {
         this.getAllStores();
         this.getCurrentLocation();
+
+    }
+
+    componentWillReceiveProps(nextProps){
+
+        if(nextProps.allStores !== null){
+            this.setState({allStores: nextProps.allStores})
+        }
     }
 
     getAllStores() {
+        let _stores = [];
         this.storesRef.orderByKey().once('value', (stores) => {
-            let _stores = [];
-            stores.forEach((store) => {
-                store._key = store.key;
-                _stores.push(store);
-            });
+            _stores = this.snapshotToArray(stores);
+            console.log('test', _stores, this.props.allStores)
             this.setState({allStores: _stores});
         });
     }
 
+
+    // getAllStores() {
+    //     this.storesRef.orderByKey().once('value', (stores) => {
+    //         let _stores = [];
+    //         stores.forEach((store) => {
+    //             store._key = store.key;
+    //             _stores.push(store);
+    //         });
+    //         this.setState({allStores: _stores});
+    //     });
+    // }
+
+
+    snapshotToArray(snapshot){
+        var returnArr = [];
+        snapshot.forEach(function(childSnapshot) {
+            var item = childSnapshot.val();
+            item.key = childSnapshot.key;
+
+            returnArr.push(item)
+
+        });
+        return returnArr
+    }
+
+
     getStoreQueue(storeKey){
-        console.log(2, storeKey);
         let activePeople = 0;
         this.ticketsRef.orderByChild('storeKey').equalTo(storeKey).on('value', (tickets) => {
             tickets.forEach((ticket) => {
-                console.log(1, ticket);
                 if (ticket.val().isActive) {
                     activePeople++
                 }
@@ -76,7 +107,6 @@ class MapsPage extends Component {
     }
 
     drawTicket(store) {
-        console.log(5, store);
         console.table(this.state.allStores)
         this.ticketsRef.orderByKey().limitToLast(1).once('child_added', (ticket) => {
             let latestNumber = ticket.val().ticketNumber;
@@ -94,6 +124,7 @@ class MapsPage extends Component {
 
     render() {
         return (
+
             <View style = {styles.preview}>
                 <MapView
                     //minZoomLevel={10}
@@ -102,8 +133,15 @@ class MapsPage extends Component {
                     //Region={this.state.region}
                     onRegionChange={this.onRegionChange.bind(this)}
                 >
+
                     {this.state.allStores.map((store) => {
-                        let _store = store.val();
+
+                        //TODO: Received as datasnapshots first time, and an array second time
+                        let _store = store;
+
+
+
+
                         return(
                             <MapView.Marker
                                 style={{padding:20}}
@@ -135,7 +173,7 @@ class MapsPage extends Component {
 
                                         </View>
                                         <Text style={styles.calloutQueue}>
-                                            {this.getStoreQueue(store._key)} personer i kø
+                                            {this.getStoreQueue(store.key)} personer i kø
                                         </Text>
 
                                         <TouchableHighlight

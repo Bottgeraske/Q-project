@@ -28,6 +28,7 @@ class SearchComponent extends Component{
             modalVisible: false,
           //Todo: currentPos should probably be updated when switching on shortDistance, but this results in async errors
             currentPos: this.updateCurrentPosition(),
+            //Todo: probably shouldn't be calling methods with calls to setState from within constructor.
             stores: this.getStores(null, false, false),
         };
     }
@@ -64,7 +65,6 @@ class SearchComponent extends Component{
 
 
     getStores(Category, isShortDistance, isShortQueue){
-        console.log('Call to getStores')
         let storesRef = this.getStoresRef();
         let ticketRef = firebase.database().ref('ticket')
 
