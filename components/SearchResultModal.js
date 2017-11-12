@@ -28,9 +28,7 @@ class SearchResultModal extends Component {
 
         }
     }
-
-
-
+    
 
     render() {
         if(this.props.modalVisible === false){
@@ -52,16 +50,13 @@ class SearchResultModal extends Component {
                                     title={item.name}
                                     subtitle={item.description}
                                     onPress={() => {
-                                        //Close Modal
+                                        //Close the Modal
                                         this.props.onClose();
-                                        //Switch to MapsPage
+
+
+                                        //Switch to MapsPage parsing in the selected store through properties
                                         let selectedStore = [item]
-
-
                                         Actions.MapTab({stores: selectedStore})
-
-
-                                        // Actions.refresh()
                                     }}
 
                                     //avatar={{ uri: item.picture.thumbnail }}
@@ -69,14 +64,9 @@ class SearchResultModal extends Component {
                             )}
                         />
                     </View>
-
-
-
                     <TouchableHighlight onPress={this.props.onClose} style={styles.Button}>
                         <Text style={{color: '#fff'}}>Back</Text>
                     </TouchableHighlight>
-
-
 
                 </Modal>
             </View>

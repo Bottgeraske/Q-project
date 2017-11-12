@@ -64,7 +64,7 @@ class SearchComponent extends Component{
 
 
 
-    getStores(Category, isShortDistance, isShortQueue){
+    getStores(Category, isShortDistance, isShortQueue, searchString){
         let storesRef = this.getStoresRef();
         let ticketRef = firebase.database().ref('ticket')
 
@@ -98,6 +98,11 @@ class SearchComponent extends Component{
         if(isShortDistance){
             stores = stores.filter(applyShortDistanceFilter, this)
         }
+
+        if(searchString !== ""){
+            stores = stores.filter(applySearchStringFilter, this)
+        }
+
 
         return stores;
 
@@ -133,7 +138,15 @@ class SearchComponent extends Component{
             return distance < 5
         }
 
-        //Methods for calculating distance between 2 coordinates.
+        //Check if searchstring is contained in the title of the store
+        function applySearchStringFilter(store) {
+            let name = store.name.toLowerCase();
+            let searchStr = this.state.searchString.toLowerCase();
+
+            return name.includes(searchStr)
+        }
+
+        //Utility methods for calculating distance between 2 coordinates.
         // Code taken from: https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates#comment28165728_365853
         function degreesToRadians(degrees) {
             return degrees * Math.PI / 180;
@@ -170,10 +183,11 @@ class SearchComponent extends Component{
     }
 
     render(){
+        console.log(this.state.searchString)
         return(
             <View>
 
-                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.state.stores}>
+                <SearchResultModal modalVisible={this.state.modalVisible} onClose={this.toggleModal} data={this.state.stores} searchString={this.state.searchString}>
 
                 </SearchResultModal>
 
@@ -221,7 +235,7 @@ class SearchComponent extends Component{
 
 
                 <View style={{padding: 40, paddingTop: '30%', backgroundColor: '#fff',}}>
-                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({stores: this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected), modalVisible: true, })}}>
+                    <TouchableHighlight style={styles.TouchableHighlight} onPress={()=> {this.setState({stores: this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected, this.state.searchString), modalVisible: true, })}}>
                         <View>
                             <Text style={{padding: 5, color: '#fff'}}>Vis Resultater</Text>
                         </View>
