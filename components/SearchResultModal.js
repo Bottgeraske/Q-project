@@ -58,7 +58,7 @@ class SearchResultModal extends Component {
                                         let selectedStore = [item]
 
 
-                                        Actions.MapTab({allStores: selectedStore})
+                                        Actions.MapTab({stores: selectedStore})
 
 
                                         // Actions.refresh()

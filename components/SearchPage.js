@@ -71,19 +71,17 @@ class SearchComponent extends Component{
         let stores = [];
 
 
-        //If category is selected, filter database on selected category and save to stores
+        //If category is selected, filter database on selected category and save to getStores
         if(Category !== null){
 
             storesRef.orderByChild('category').equalTo(Category).on('value', (snapshot) => {
                 stores = this.snapshotToArray(snapshot);
-                console.log('category filter', stores)
-
             }), function (error) {
                 console.log("Error: " + error.code);
             };
         }
 
-        //No category selected. Get all stores and save them in stores
+        //No category selected. Get all getStores and save them in getStores
         else {
             storesRef.orderByKey().on('value', (snapshot) => {
                 stores = this.snapshotToArray(snapshot)
@@ -91,7 +89,7 @@ class SearchComponent extends Component{
         }
 
 
-        //If shortqueue is selected then apply shortqueuefilter to stores
+        //If shortqueue is selected then apply shortqueuefilter to getStores
         if(isShortQueue){
             stores = stores.filter(applyShortQueueFilter)
         }
@@ -160,7 +158,6 @@ class SearchComponent extends Component{
 
     updateCurrentPosition() {
         navigator.geolocation.getCurrentPosition((position) => {
-            console.log(4, 'getCurrentLocation')
             let region = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
@@ -173,9 +170,6 @@ class SearchComponent extends Component{
     }
 
     render(){
-        //this.getStores(this.state.selectedCategory, this.state.shortDistanceSelected, this.state.shortQueueSelected)
-        console.log('RENDER')
-
         return(
             <View>
 

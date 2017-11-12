@@ -143,7 +143,7 @@ function resetDB() {
             name: 'Stadion de Trianglen',
             description: 'Me gusta las stadione de Dinamarka',
             coordinates: {
-                latitude: 55.7000354,
+                latitude: 55.7300354,
                 longitude: 12.57803100000001
             },
             isOpen: true,
@@ -243,7 +243,7 @@ function resetDB() {
             name: 'Farmacia de Trianglen',
             description: 'Me gusta las Farmacia de Dinamarka',
             coordinates: {
-                latitude: 55.7000354,
+                latitude: 55.740354,
                 longitude: 12.57803100000001
             },
             isOpen: true,
@@ -293,7 +293,7 @@ function resetDB() {
             name: 'Farmacia de Østerbrogade',
             description: 'También me gusta esta farmacia',
             coordinates: {
-                latitude: 55.7094258,
+                latitude: 55.7694258,
                 longitude: 12.577164799999991
             },
             isOpen: true,
@@ -399,7 +399,7 @@ function resetDB() {
     initCustomers.forEach((customer) => {
         customerKey1 = customerRef.push(customer).key;
     })
-    //get specific stores
+    //get specific getStores
     storeRef.orderByChild('name').equalTo('Farmacia de Trianglen').once('child_added', (child) => {
         storeKey1 = child.key
     });
